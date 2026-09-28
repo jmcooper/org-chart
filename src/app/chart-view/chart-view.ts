@@ -6,7 +6,7 @@ import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
 import { Candidate, Position, PositionKey, Presidency, statusLabel } from '../models';
 import { OrgsService } from '../orgs.service';
-import { addProposed, removeCandidate, renameCandidate } from '../position-ops';
+import { addProposed, removeCandidate, renameCandidate, setPrimary } from '../position-ops';
 
 const POLL_MS = 10_000;
 const MAX_VISIBLE_PROPOSED = 2;
@@ -120,6 +120,12 @@ export class ChartView {
     this.service.updatePosition(this.orgId(), pres.id, key, (pos) =>
       renameCandidate(pos, candidate.id, name),
     );
+  }
+
+  /** Typing into an empty primary box fills it directly as "Considered". */
+  protected setPrimary(pres: Presidency, key: PositionKey, name: string): void {
+    if (!name) return;
+    this.service.updatePosition(this.orgId(), pres.id, key, (pos) => setPrimary(pos, name));
   }
 
   protected add(pres: Presidency, key: PositionKey, name: string): void {

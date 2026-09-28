@@ -8,6 +8,13 @@ export function addProposed(pos: Position, name: string): Position {
   return { ...pos, proposed: [...pos.proposed, { id: newId(), name: trimmed }] };
 }
 
+/** Fills an empty primary spot directly with a new name as "Considered". */
+export function setPrimary(pos: Position, name: string): Position {
+  const trimmed = name.trim();
+  if (!trimmed || pos.primary) return pos;
+  return { ...pos, primary: { id: newId(), name: trimmed, status: 'considered' } };
+}
+
 export function renameCandidate(pos: Position, id: string, name: string): Position {
   const trimmed = name.trim();
   if (!trimmed) return pos;

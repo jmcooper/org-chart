@@ -44,8 +44,8 @@
                   <div class="title">{{ pos.title }}</div>
                   @if (pos.primary; as p) {
                     <div
-                      class="name-block"
-                      [class]="'status-' + p.status"
+                      class="name-block editable"
+                      [class]="'editable status-' + p.status"
                       [title]="statusLabel(p.status)"
                     >
                       <app-editable-text
@@ -68,7 +68,14 @@
                       }
                     </div>
                   } @else {
-                    <div class="name-block empty">—</div>
+                    <div class="name-block empty editable">
+                      <app-editable-text
+                        value=""
+                        placeholder="Add a name"
+                        [label]="'Add a name for ' + pos.title"
+                        (commit)="setPrimary(pres, pos.key, $event)"
+                      />
+                    </div>
                   }
                   <ul class="proposed">
                     @for (c of visibleProposed(pres, pos); track c.id) {
@@ -87,14 +94,16 @@
                         </button>
                       </li>
                     }
-                    <li class="add">
-                      <app-editable-text
-                        value=""
-                        placeholder="+ Add name"
-                        [label]="'Add a name for ' + pos.title"
-                        (commit)="add(pres, pos.key, $event)"
-                      />
-                    </li>
+                    @if (pos.primary) {
+                      <li class="add">
+                        <app-editable-text
+                          value=""
+                          placeholder="+ Add name"
+                          [label]="'Add another name for ' + pos.title"
+                          (commit)="add(pres, pos.key, $event)"
+                        />
+                      </li>
+                    }
                   </ul>
                 </li>
               }

@@ -3,7 +3,7 @@
   top: 0.35rem;
   right: 0.35rem;
   z-index: 2;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   line-height: 1.2;
 }
 
@@ -18,12 +18,13 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   color: currentColor;
-  background: color-mix(in srgb, currentColor 16%, transparent);
+  /* Opaque tint of the box colour, so a long name running underneath stays hidden behind it. */
+  background: color-mix(in srgb, currentColor 20%, var(--block-bg, transparent));
   white-space: nowrap;
 
   &:hover,
   &[aria-expanded='true'] {
-    background: color-mix(in srgb, currentColor 28%, transparent);
+    background: color-mix(in srgb, currentColor 32%, var(--block-bg, transparent));
   }
   &:focus-visible {
     outline: 2px solid currentColor;

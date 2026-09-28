@@ -84,10 +84,6 @@
       padding: 0;
       --editable-padding: 0.45em 0.7em;
     }
-    /* Leave the first line clear of the status pill. */
-    &.editable:not(.empty) {
-      --editable-padding: 0.45em 6.5rem 0.45em 0.7em;
-    }
   }
   .proposed {
     color: var(--muted);

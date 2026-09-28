@@ -147,21 +147,27 @@ input[type='text'] {
   background: var(--status-empty-bg);
   color: var(--status-empty-fg);
 
+  --block-bg: var(--status-empty-bg);
+
   &.status-considered {
-    background: var(--status-considered-bg);
+    --block-bg: var(--status-considered-bg);
+    background: var(--block-bg);
     color: var(--status-considered-fg);
   }
   &.status-agreed {
-    background: var(--status-agreed-bg);
+    --block-bg: var(--status-agreed-bg);
+    background: var(--block-bg);
     color: var(--status-agreed-fg);
   }
   &.status-called {
-    background: var(--status-called-bg);
+    --block-bg: var(--status-called-bg);
+    background: var(--block-bg);
     color: var(--status-called-fg);
   }
   &.status-sustained,
   &.status-setApart {
-    background: var(--status-sustained-bg);
+    --block-bg: var(--status-sustained-bg);
+    background: var(--block-bg);
     color: var(--status-sustained-fg);
   }
 }

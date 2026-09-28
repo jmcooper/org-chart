@@ -56,7 +56,7 @@ export interface StatusInfo {
 
 /** Ordered list of statuses as a calling progresses. */
 export const STATUSES: readonly StatusInfo[] = [
-  { value: 'considered', label: 'Considered' },
+  { value: 'considered', label: 'Consider' },
   { value: 'agreed', label: 'Agreed' },
   { value: 'called', label: 'Called' },
   { value: 'sustained', label: 'Sustained' },

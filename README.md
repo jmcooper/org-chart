@@ -21,17 +21,17 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   for 30 days; "Lock" in the corner menu forgets it. PINs are stored only as scrypt hashes and are
   never sent to clients. Guessing is throttled per organization and per client address.
 - **Full chart** (`/o/:orgId`): every presidency at a glance. Names can be edited right on the chart:
-  tap a name to change it (clear it to remove it), or tap "+ Add name" under a position to propose
+  tap a name to change it (clear it to remove it), or tap "+ Add name for consideration" under a position to propose
   someone. Tap a presidency's title (marked with a chevron) to open the focused view. The display
   polls the server every 10 seconds so edits made from a phone show up on the office screen.
 - **Focused presidency** (`/o/:orgId/edit/:id`): large type for the office screen, plus the actions
   that need more room. Each position (President, First Counselor, Second Counselor, Secretary) has a
   primary spot plus a list of proposed names.
   - Add as many proposed names as you like.
-  - **Consider** promotes a proposed name into the primary spot (status *Considered*). Whoever was
+  - **Consider** promotes a proposed name into the primary spot (status *Consider*). Whoever was
     there moves back to the top of the proposed list.
   - A small pill in the corner of every filled name box shows its status and drops down the choices:
-    **Considered** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
+    **Consider** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
     **Set Apart** (dark green with a check mark). It works on the chart and in the focused view.
   - Edit a name, move it back to proposed, or remove it. Every change saves immediately.
 - Data is stored as JSON on the server under `data/` and survives restarts.

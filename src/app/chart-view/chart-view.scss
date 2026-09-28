@@ -150,7 +150,7 @@
     .add {
       color: var(--accent);
       opacity: 0.75;
-      font-size: var(--pos-add, 0.95rem);
+      font-size: var(--pos-add, 0.8rem);
       margin-top: 2px;
       --editable-padding: 0.25em 0.4em;
       --editable-min-height: 36px;
@@ -227,7 +227,7 @@
     --pos-title: clamp(0.75rem, 0.9vw, 1.1rem);
     --pos-name: clamp(1.1rem, 1.45vw, 1.8rem);
     --pos-hint: clamp(0.7rem, 0.9vw, 1.1rem);
-    --pos-add: clamp(0.9rem, 1.05vw, 1.25rem);
+    --pos-add: clamp(0.8rem, 0.9vw, 1.05rem);
   }
   .row-orgs {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

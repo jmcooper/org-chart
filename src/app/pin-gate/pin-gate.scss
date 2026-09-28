@@ -1,0 +1,45 @@
+.gate {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.card {
+  width: min(100%, 420px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+
+  h1 {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+  }
+}
+
+.pin {
+  text-align: center;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.45em;
+  text-indent: 0.45em;
+  text-transform: uppercase;
+  min-height: 64px;
+  padding: 0.3em 0.4em;
+}
+
+.error-text {
+  margin: 0;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+button.primary {
+  font-size: 1.1rem;
+  min-height: 52px;
+}

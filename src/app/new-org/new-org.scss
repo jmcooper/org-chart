@@ -1,0 +1,66 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 20;
+}
+
+.dialog {
+  position: fixed;
+  z-index: 21;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 2 * var(--gutter)), 420px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--muted);
+
+    small {
+      font-weight: normal;
+    }
+  }
+
+  .pin {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .error-text {
+    margin: 0;
+    color: var(--danger);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    button {
+      min-width: 100px;
+    }
+  }
+}

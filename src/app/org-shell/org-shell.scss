@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+.switcher {
+  position: absolute;
+  top: 0;
+  right: var(--gutter);
+  z-index: 5;
+}

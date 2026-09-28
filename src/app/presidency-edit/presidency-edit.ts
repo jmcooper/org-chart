@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import {
   Candidate,
-  Organization,
+  Presidency,
   Position,
   PositionKey,
   STATUSES,
@@ -13,21 +13,22 @@ import {
 } from '../models';
 
 @Component({
-  selector: 'app-org-edit',
+  selector: 'app-presidency-edit',
   imports: [RouterLink],
-  templateUrl: './org-edit.html',
-  styleUrl: './org-edit.scss',
+  templateUrl: './presidency-edit.html',
+  styleUrl: './presidency-edit.scss',
 })
-export class OrgEdit {
-  /** Bound from the route parameter by withComponentInputBinding(). */
+export class PresidencyEdit {
+  /** Bound from the route parameters by withComponentInputBinding(). */
+  readonly orgId = input.required<string>();
   readonly id = input.required<string>();
 
   protected readonly service = inject(ChartService);
   protected readonly statuses = STATUSES;
   protected readonly statusLabel = statusLabel;
 
-  protected readonly org = computed<Organization | undefined>(() =>
-    this.service.organizations().find((o) => o.id === this.id()),
+  protected readonly presidency = computed<Presidency | undefined>(() =>
+    this.service.presidencies().find((p) => p.id === this.id()),
   );
 
   // ---- mutations (each one saves immediately) ----
@@ -100,11 +101,11 @@ export class OrgEdit {
   }
 
   private update(key: PositionKey, fn: (pos: Position) => Position): void {
-    const org = this.org();
-    if (!org) return;
-    void this.service.saveOrganization({
-      ...org,
-      positions: org.positions.map((p) => (p.key === key ? fn(p) : p)),
+    const presidency = this.presidency();
+    if (!presidency) return;
+    void this.service.savePresidency(this.orgId(), {
+      ...presidency,
+      positions: presidency.positions.map((p) => (p.key === key ? fn(p) : p)),
     });
   }
 }

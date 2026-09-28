@@ -1,0 +1,53 @@
+<div class="backdrop" (click)="close.emit()"></div>
+<form
+  class="dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="new-org-title"
+  (submit)="submit($event, nameInput, pinInput)"
+>
+  <h2 id="new-org-title">New organization</h2>
+
+  <label>
+    <span>Name</span>
+    <input
+      #nameInput
+      type="text"
+      maxlength="60"
+      autocomplete="off"
+      placeholder="e.g. Summerfield Ward"
+      autofocus
+    />
+  </label>
+
+  <label>
+    <span>PIN <small>(five letters, no numbers)</small></span>
+    <input
+      #pinInput
+      class="pin"
+      type="text"
+      maxlength="5"
+      autocomplete="off"
+      autocapitalize="characters"
+      autocorrect="off"
+      spellcheck="false"
+      placeholder="ABCDE"
+      (input)="onPinInput(pinInput)"
+    />
+  </label>
+  <p class="hint">
+    Anyone with the PIN can view and edit this organization. It cannot be recovered later, so write
+    it down.
+  </p>
+
+  @if (error(); as err) {
+    <p class="error-text" role="alert">{{ err }}</p>
+  }
+
+  <div class="actions">
+    <button type="button" (click)="close.emit()" [disabled]="busy()">Cancel</button>
+    <button type="submit" class="primary" [disabled]="busy()">
+      {{ busy() ? 'Creating…' : 'Create' }}
+    </button>
+  </div>
+</form>

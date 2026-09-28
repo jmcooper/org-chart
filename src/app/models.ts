@@ -20,7 +20,8 @@ export interface Position {
   proposed: Candidate[];
 }
 
-export interface Organization {
+/** A presidency or bishopric within an organization. */
+export interface Presidency {
   id: string;
   name: string;
   /** Layout row on the full chart: 1 = leadership (top), 2 = auxiliaries. */
@@ -30,8 +31,21 @@ export interface Organization {
 
 export interface OrgChart {
   updatedAt: string | null;
-  organizations: Organization[];
+  presidencies: Presidency[];
 }
+
+/** A ward, branch, or other unit. Its PIN never leaves the server. */
+export interface Org {
+  id: string;
+  name: string;
+}
+
+export interface OrgList {
+  defaultOrgId: string | null;
+  orgs: Org[];
+}
+
+export const PIN_PATTERN = /^[A-Za-z]{5}$/;
 
 export interface StatusInfo {
   value: Status;

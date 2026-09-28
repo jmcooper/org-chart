@@ -1,0 +1,24 @@
+<button
+  type="button"
+  class="trigger"
+  (click)="toggle()"
+  [attr.aria-expanded]="open()"
+  aria-haspopup="menu"
+>
+  {{ current()?.name ?? 'Organizations' }} <span class="caret" aria-hidden="true">▾</span>
+</button>
+
+@if (open()) {
+  <div class="menu" role="menu">
+    @for (o of others(); track o.id) {
+      <a role="menuitem" [routerLink]="['/o', o.id]" (click)="open.set(false)">{{ o.name }}</a>
+    } @empty {
+      <span class="none">No other organizations</span>
+    }
+    <hr />
+    <button type="button" role="menuitem" (click)="choose('new')">New organization…</button>
+    <button type="button" role="menuitem" (click)="choose('lock')">
+      Lock {{ current()?.name ?? 'this organization' }}
+    </button>
+  </div>
+}

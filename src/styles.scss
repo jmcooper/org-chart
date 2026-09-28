@@ -181,7 +181,7 @@ input[type='text'] {
   align-items: center;
   gap: 12px;
   min-height: 60px;
-  padding: 8px 0;
+  padding: 8px 9rem 8px 0; /* right padding keeps clear of the organization switcher */
   flex-wrap: wrap;
 
   h1 {

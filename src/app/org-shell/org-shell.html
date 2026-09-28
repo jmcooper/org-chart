@@ -1,0 +1,28 @@
+<app-org-switcher
+  class="switcher"
+  [orgId]="orgId()"
+  (newOrg)="showNewOrg.set(true)"
+  (lock)="lock()"
+/>
+
+@if (orgs.list()) {
+  @if (org(); as org) {
+    @if (unlocked()) {
+      <router-outlet />
+    } @else {
+      <app-pin-gate [org]="org" />
+    }
+  } @else {
+    <div class="error">
+      No organization named "{{ orgId() }}". Use the menu in the corner to pick one.
+    </div>
+  }
+} @else if (orgs.error(); as err) {
+  <div class="error">Could not load organizations: {{ err }}</div>
+} @else {
+  <p class="hint">Loading…</p>
+}
+
+@if (showNewOrg()) {
+  <app-new-org (close)="showNewOrg.set(false)" />
+}

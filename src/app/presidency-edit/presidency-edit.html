@@ -1,5 +1,5 @@
 <header class="topbar">
-  <a class="back" routerLink="/" aria-label="Back to full chart">
+  <a class="back" [routerLink]="['/o', orgId()]" aria-label="Back to full chart">
     <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
       <path
         d="M15 5l-7 7 7 7"
@@ -12,7 +12,7 @@
     </svg>
     <span>Chart</span>
   </a>
-  <h1>{{ org()?.name ?? 'Presidency' }}</h1>
+  <h1>{{ presidency()?.name ?? 'Presidency' }}</h1>
   <span class="save-state" [class]="service.saveState()" aria-live="polite">
     @switch (service.saveState()) {
       @case ('saving') {
@@ -34,9 +34,9 @@
   </div>
 }
 
-@if (org(); as org) {
+@if (presidency(); as presidency) {
   <main class="positions">
-    @for (pos of org.positions; track pos.key) {
+    @for (pos of presidency.positions; track pos.key) {
       <section class="position">
         <h2>{{ pos.title }}</h2>
 
@@ -132,7 +132,9 @@
     }
   </main>
 } @else if (service.chart()) {
-  <div class="error">No presidency with id "{{ id() }}". <a routerLink="/">Back to chart</a></div>
+  <div class="error">
+    No presidency with id "{{ id() }}". <a [routerLink]="['/o', orgId()]">Back to chart</a>
+  </div>
 } @else if (service.loadError(); as err) {
   <div class="error">Could not load the chart: {{ err }}</div>
 } @else {

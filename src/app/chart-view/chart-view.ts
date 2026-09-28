@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, computed, inject } from '@angular/core';
+import { Component, DestroyRef, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
-import { Candidate, Organization, Position, statusLabel } from '../models';
+import { Candidate, Position, Presidency, statusLabel } from '../models';
 
 const POLL_MS = 10_000;
 const MAX_VISIBLE_PROPOSED = 2;
@@ -14,29 +14,31 @@ const MAX_VISIBLE_PROPOSED = 2;
   styleUrl: './chart-view.scss',
 })
 export class ChartView {
+  /** Bound from the parent route parameter. */
+  readonly orgId = input.required<string>();
+
   protected readonly service = inject(ChartService);
   private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly rows = computed<Organization[][]>(() => {
-    const byRow = new Map<number, Organization[]>();
-    for (const org of this.service.organizations()) {
-      const list = byRow.get(org.row) ?? [];
-      list.push(org);
-      byRow.set(org.row, list);
+  protected readonly rows = computed<Presidency[][]>(() => {
+    const byRow = new Map<number, Presidency[]>();
+    for (const pres of this.service.presidencies()) {
+      const list = byRow.get(pres.row) ?? [];
+      list.push(pres);
+      byRow.set(pres.row, list);
     }
-    return [...byRow.entries()].sort(([a], [b]) => a - b).map(([, orgs]) => orgs);
+    return [...byRow.entries()].sort(([a], [b]) => a - b).map(([, list]) => list);
   });
 
   protected readonly statusLabel = statusLabel;
 
   constructor() {
     // Keep the office display current with edits made from phones.
-    const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') void this.service.load();
-    }, POLL_MS);
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') void this.service.load();
+    const refresh = () => {
+      if (document.visibilityState === 'visible') void this.service.load(this.orgId());
     };
+    const timer = setInterval(refresh, POLL_MS);
+    const onVisible = refresh;
     document.addEventListener('visibilitychange', onVisible);
     this.destroyRef.onDestroy(() => {
       clearInterval(timer);

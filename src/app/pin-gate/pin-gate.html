@@ -1,0 +1,27 @@
+<div class="gate">
+  <form class="card" (submit)="submit($event, pinInput)">
+    <h1>{{ org().name }}</h1>
+    <p class="hint">Enter the five-letter PIN to open this organization.</p>
+    <input
+      #pinInput
+      class="pin"
+      type="text"
+      inputmode="text"
+      autocomplete="one-time-code"
+      autocapitalize="characters"
+      autocorrect="off"
+      spellcheck="false"
+      maxlength="5"
+      placeholder="•••••"
+      aria-label="PIN"
+      autofocus
+      (input)="onInput(pinInput)"
+    />
+    @if (error(); as err) {
+      <p class="error-text" role="alert">{{ err }}</p>
+    }
+    <button type="submit" class="primary" [disabled]="busy()">
+      {{ busy() ? 'Checking…' : 'Unlock' }}
+    </button>
+  </form>
+</div>

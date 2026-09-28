@@ -13,6 +13,9 @@ services:
     networks:
       default:
         ipv4_address: 10.42.12.20
+    env_file:
+      - path: .env
+        required: false
     volumes:
       - ./data:/app/data
     restart: always

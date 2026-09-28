@@ -1,0 +1,140 @@
+<header class="topbar">
+  <a class="back" routerLink="/" aria-label="Back to full chart">
+    <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+      <path
+        d="M15 5l-7 7 7 7"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span>Chart</span>
+  </a>
+  <h1>{{ org()?.name ?? 'Presidency' }}</h1>
+  <span class="save-state" [class]="service.saveState()" aria-live="polite">
+    @switch (service.saveState()) {
+      @case ('saving') {
+        Saving…
+      }
+      @case ('saved') {
+        Saved
+      }
+      @case ('error') {
+        Not saved
+      }
+    }
+  </span>
+</header>
+
+@if (service.saveState() === 'error') {
+  <div class="error">
+    Could not save: {{ service.saveError() }}. Check the connection and try again.
+  </div>
+}
+
+@if (org(); as org) {
+  <main class="positions">
+    @for (pos of org.positions; track pos.key) {
+      <section class="position">
+        <h2>{{ pos.title }}</h2>
+
+        @if (pos.primary; as p) {
+          <div class="primary">
+            <div class="name-block" [class]="'status-' + p.status">
+              {{ p.name }}
+              @if (p.status === 'setApart') {
+                <svg class="check" viewBox="0 0 24 24" aria-label="Set apart" role="img">
+                  <circle cx="12" cy="12" r="11" fill="#ffffff" />
+                  <path
+                    d="M6.5 12.5l3.5 3.5 7.5-8"
+                    fill="none"
+                    stroke="#2e7d32"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </div>
+
+            <div class="statuses" role="group" [attr.aria-label]="'Status for ' + p.name">
+              @for (s of statuses; track s.value) {
+                <button
+                  type="button"
+                  class="status-btn"
+                  [class]="'status-btn status-' + s.value"
+                  [class.active]="s.value === p.status"
+                  [attr.aria-pressed]="s.value === p.status"
+                  (click)="setStatus(pos.key, s.value)"
+                >
+                  {{ s.label }}
+                </button>
+              }
+            </div>
+
+            <div class="primary-actions">
+              <button type="button" (click)="rename(pos.key, p, true)">Edit name</button>
+              <button type="button" (click)="demote(pos.key)">Back to proposed</button>
+              <button type="button" class="danger" (click)="removePrimary(pos.key, pos)">
+                Remove
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="name-block empty">No one selected</div>
+        }
+
+        <h3>Proposed</h3>
+        @if (pos.proposed.length === 0) {
+          <p class="hint">No proposed names yet.</p>
+        }
+        <ul class="proposed">
+          @for (c of pos.proposed; track c.id) {
+            <li>
+              <span class="pname" (click)="rename(pos.key, c, false)" title="Tap to edit name">{{
+                c.name
+              }}</span>
+              <button type="button" class="primary" (click)="promote(pos.key, c)">Consider</button>
+              <button
+                type="button"
+                class="icon danger"
+                (click)="removeProposed(pos.key, c)"
+                [attr.aria-label]="'Remove ' + c.name"
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                  <path
+                    d="M6 6l12 12M18 6L6 18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </li>
+          }
+        </ul>
+
+        <form class="add" (submit)="$event.preventDefault(); addProposed(pos.key, nameInput)">
+          <input
+            #nameInput
+            type="text"
+            placeholder="Add a name…"
+            autocomplete="off"
+            autocapitalize="words"
+            enterkeyhint="done"
+          />
+          <button type="submit" class="primary">Add</button>
+        </form>
+      </section>
+    }
+  </main>
+} @else if (service.chart()) {
+  <div class="error">No presidency with id "{{ id() }}". <a routerLink="/">Back to chart</a></div>
+} @else if (service.loadError(); as err) {
+  <div class="error">Could not load the chart: {{ err }}</div>
+} @else {
+  <p class="hint">Loading…</p>
+}

@@ -1,0 +1,179 @@
+:host {
+  display: block;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px 6px 4px;
+  border-radius: 10px;
+  color: var(--accent);
+  font-weight: 600;
+  min-height: 44px;
+
+  &:hover {
+    background: var(--surface);
+  }
+}
+
+.save-state {
+  min-width: 5em;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.9rem;
+
+  &.error {
+    color: var(--danger);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.positions {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.position {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    font-size: var(--pos-title, 1.1rem);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  h3 {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+}
+
+.name-block {
+  font-size: var(--pos-name, 1.5rem);
+}
+
+.primary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.status-btn {
+  flex: 1 1 auto;
+  min-height: 40px;
+  padding: 0.4em 0.7em;
+  font-size: 0.9rem;
+  border-width: 2px;
+  border-color: transparent;
+  background: var(--surface-2);
+  color: var(--muted);
+
+  &.active {
+    color: inherit;
+    font-weight: 650;
+  }
+  &.status-considered.active {
+    background: var(--status-considered-bg);
+    color: var(--status-considered-fg);
+  }
+  &.status-agreed.active {
+    background: var(--status-agreed-bg);
+    color: var(--status-agreed-fg);
+  }
+  &.status-called.active {
+    background: var(--status-called-bg);
+    color: var(--status-called-fg);
+  }
+  &.status-sustained.active,
+  &.status-setApart.active {
+    background: var(--status-sustained-bg);
+    color: var(--status-sustained-fg);
+  }
+}
+
+.primary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  button {
+    flex: 1 1 auto;
+    font-size: 0.9rem;
+  }
+}
+
+.proposed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 6px 6px 6px 12px;
+  }
+  .pname {
+    flex: 1 1 auto;
+    font-size: var(--proposed-name, 1.1rem);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+    cursor: text;
+  }
+}
+
+.add {
+  display: flex;
+  gap: 8px;
+
+  input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 720px) {
+  .positions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Office screen: one presidency fills the display, readable from across the room. */
+@media (min-width: 1200px) {
+  :host {
+    --pos-title: clamp(1rem, 1.3vw, 1.5rem);
+    --pos-name: clamp(1.6rem, 2.4vw, 3rem);
+    --proposed-name: clamp(1.1rem, 1.5vw, 1.8rem);
+  }
+  .positions {
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+  }
+  .status-btn,
+  .primary-actions button {
+    font-size: clamp(0.9rem, 1vw, 1.2rem);
+  }
+}

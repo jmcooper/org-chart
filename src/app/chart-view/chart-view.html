@@ -1,0 +1,61 @@
+<header class="topbar">
+  <h1>Ward Organization</h1>
+  @if (service.chart()?.updatedAt; as updatedAt) {
+    <span class="hint">Updated {{ updatedAt | date: 'MMM d, h:mm a' }}</span>
+  }
+</header>
+
+@if (service.loadError(); as err) {
+  <div class="error">Could not load the chart: {{ err }}</div>
+}
+
+@if (service.chart()) {
+  <main class="chart">
+    @for (row of rows(); track $index) {
+      <section class="row" [class.row-top]="$first" [class.row-orgs]="!$first">
+        @for (org of row; track org.id) {
+          <a class="org" [routerLink]="['/org', org.id]" [attr.aria-label]="'Edit ' + org.name">
+            <h2>{{ org.name }}</h2>
+            <ul class="positions">
+              @for (pos of org.positions; track pos.key) {
+                <li class="position">
+                  <div class="title">{{ pos.title }}</div>
+                  @if (pos.primary; as p) {
+                    <div
+                      class="name-block"
+                      [class]="'status-' + p.status"
+                      [title]="statusLabel(p.status)"
+                    >
+                      {{ p.name }}
+                      @if (p.status === 'setApart') {
+                        <svg class="check" viewBox="0 0 24 24" aria-label="Set apart" role="img">
+                          <circle cx="12" cy="12" r="11" fill="#ffffff" />
+                          <path
+                            d="M6.5 12.5l3.5 3.5 7.5-8"
+                            fill="none"
+                            stroke="#2e7d32"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      }
+                    </div>
+                  } @else {
+                    <div class="name-block empty">—</div>
+                  }
+                  @if (proposedHint(pos); as hint) {
+                    <div class="proposed-hint">{{ hint }}</div>
+                  }
+                </li>
+              }
+            </ul>
+          </a>
+        }
+      </section>
+    }
+  </main>
+  <p class="hint tap-hint">Tap a presidency to edit it.</p>
+} @else if (!service.loadError()) {
+  <p class="hint">Loading…</p>
+}

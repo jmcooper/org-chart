@@ -1,0 +1,106 @@
+:host {
+  display: block;
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+.org {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  transition:
+    border-color 0.12s,
+    transform 0.12s;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
+  &:active {
+    transform: scale(0.99);
+  }
+
+  h2 {
+    font-size: var(--org-title, 1.2rem);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+}
+
+.positions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.position {
+  .title {
+    color: var(--muted);
+    font-size: var(--pos-title, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .name-block {
+    font-size: var(--pos-name, 1.15rem);
+  }
+  .proposed-hint {
+    color: var(--muted);
+    font-size: var(--pos-hint, 0.8rem);
+    margin-top: 3px;
+  }
+}
+
+.tap-hint {
+  text-align: center;
+  margin: 18px 0 0;
+}
+
+/* Two columns of auxiliaries from tablet width. */
+@media (min-width: 640px) {
+  .row-orgs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .row-top {
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+  }
+  /* Bishopric reads better with its four positions side by side. */
+  .row-top .positions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop / office screen: everything on one page, larger type. */
+@media (min-width: 1100px) {
+  :host {
+    --org-title: clamp(1.2rem, 1.9vw, 2.2rem);
+    --pos-title: clamp(0.75rem, 1vw, 1.2rem);
+    --pos-name: clamp(1.1rem, 1.6vw, 2rem);
+    --pos-hint: clamp(0.7rem, 0.9vw, 1.1rem);
+  }
+  .row-orgs {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .row-top {
+    grid-template-columns: minmax(0, 1100px);
+  }
+  .row-top .positions {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

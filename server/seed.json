@@ -1,0 +1,71 @@
+{
+  "updatedAt": null,
+  "organizations": [
+    {
+      "id": "bishopric",
+      "name": "Bishopric",
+      "row": 1,
+      "positions": [
+        { "key": "president", "title": "Bishop", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Executive Secretary", "primary": null, "proposed": [] }
+      ]
+    },
+    {
+      "id": "elders-quorum",
+      "name": "Elders Quorum",
+      "row": 2,
+      "positions": [
+        { "key": "president", "title": "President", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Secretary", "primary": null, "proposed": [] }
+      ]
+    },
+    {
+      "id": "relief-society",
+      "name": "Relief Society",
+      "row": 2,
+      "positions": [
+        { "key": "president", "title": "President", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Secretary", "primary": null, "proposed": [] }
+      ]
+    },
+    {
+      "id": "young-women",
+      "name": "Young Women",
+      "row": 2,
+      "positions": [
+        { "key": "president", "title": "President", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Secretary", "primary": null, "proposed": [] }
+      ]
+    },
+    {
+      "id": "primary",
+      "name": "Primary",
+      "row": 2,
+      "positions": [
+        { "key": "president", "title": "President", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Secretary", "primary": null, "proposed": [] }
+      ]
+    },
+    {
+      "id": "sunday-school",
+      "name": "Sunday School",
+      "row": 2,
+      "positions": [
+        { "key": "president", "title": "President", "primary": null, "proposed": [] },
+        { "key": "first", "title": "First Counselor", "primary": null, "proposed": [] },
+        { "key": "second", "title": "Second Counselor", "primary": null, "proposed": [] },
+        { "key": "secretary", "title": "Secretary", "primary": null, "proposed": [] }
+      ]
+    }
+  ]
+}

@@ -2,9 +2,10 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
-import { Organization, Position, statusLabel } from '../models';
+import { Candidate, Organization, Position, statusLabel } from '../models';
 
 const POLL_MS = 10_000;
+const MAX_VISIBLE_PROPOSED = 2;
 
 @Component({
   selector: 'app-chart-view',
@@ -43,9 +44,12 @@ export class ChartView {
     });
   }
 
-  protected proposedHint(pos: Position): string {
-    const n = pos.proposed.length;
-    if (n === 0) return pos.primary ? '' : 'No names yet';
-    return `${n} more proposed`;
+  /** Names shown under a position; the rest are summarised as "+X more…". */
+  protected visibleProposed(pos: Position): Candidate[] {
+    return pos.proposed.slice(0, MAX_VISIBLE_PROPOSED);
+  }
+
+  protected hiddenProposedCount(pos: Position): number {
+    return Math.max(0, pos.proposed.length - MAX_VISIBLE_PROPOSED);
   }
 }

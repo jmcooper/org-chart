@@ -59,10 +59,24 @@
   .name-block {
     font-size: var(--pos-name, 1.15rem);
   }
-  .proposed-hint {
+  .proposed-hint,
+  .proposed {
     color: var(--muted);
     font-size: var(--pos-hint, 0.8rem);
     margin-top: 3px;
+  }
+  .proposed {
+    list-style: none;
+    padding: 0 0 0 0.7em;
+    display: grid;
+    gap: 2px;
+
+    li {
+      overflow-wrap: anywhere;
+    }
+    .more {
+      font-style: italic;
+    }
   }
 }
 
@@ -89,9 +103,9 @@
 /* Desktop / office screen: everything on one page, larger type. */
 @media (min-width: 1100px) {
   :host {
-    --org-title: clamp(1.2rem, 1.9vw, 2.2rem);
-    --pos-title: clamp(0.75rem, 1vw, 1.2rem);
-    --pos-name: clamp(1.1rem, 1.6vw, 2rem);
+    --org-title: clamp(1.2rem, 1.7vw, 2rem);
+    --pos-title: clamp(0.75rem, 0.9vw, 1.1rem);
+    --pos-name: clamp(1.1rem, 1.45vw, 1.8rem);
     --pos-hint: clamp(0.7rem, 0.9vw, 1.1rem);
   }
   .row-orgs {

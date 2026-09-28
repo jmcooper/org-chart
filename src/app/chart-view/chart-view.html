@@ -44,8 +44,17 @@
                   } @else {
                     <div class="name-block empty">—</div>
                   }
-                  @if (proposedHint(pos); as hint) {
-                    <div class="proposed-hint">{{ hint }}</div>
+                  @if (pos.proposed.length > 0) {
+                    <ul class="proposed">
+                      @for (c of visibleProposed(pos); track c.id) {
+                        <li>{{ c.name }}</li>
+                      }
+                      @if (hiddenProposedCount(pos); as more) {
+                        <li class="more">+{{ more }} more…</li>
+                      }
+                    </ul>
+                  } @else if (!pos.primary) {
+                    <div class="proposed-hint">No names yet</div>
                   }
                 </li>
               }

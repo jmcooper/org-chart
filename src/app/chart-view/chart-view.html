@@ -72,6 +72,7 @@
                       <app-editable-text
                         value=""
                         placeholder="Add a name"
+                        [quiet]="true"
                         [label]="'Add a name for ' + pos.title"
                         (commit)="setPrimary(pres, pos.key, $event)"
                       />

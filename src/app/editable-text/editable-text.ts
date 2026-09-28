@@ -23,6 +23,8 @@ export class EditableText {
   readonly value = input.required<string>();
   readonly placeholder = input('');
   readonly label = input('');
+  /** When empty, show only a faint "+" and reveal the placeholder on hover or focus. */
+  readonly quiet = input(false);
   readonly commit = output<string>();
 
   protected readonly editing = signal(false);

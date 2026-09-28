@@ -35,6 +35,31 @@ input {
   &.empty {
     opacity: 0.85;
   }
+
+  /* Quiet empty state: a faint plus sign; the wording appears only on hover or focus. */
+  &.quiet {
+    opacity: 1;
+    text-decoration: none;
+
+    .glyph {
+      opacity: 0.45;
+      font-weight: 400;
+    }
+    .reveal {
+      margin-left: 0.4em;
+      font-weight: 400;
+      font-size: 0.75em;
+      opacity: 0;
+      transition: opacity 0.12s;
+    }
+    &:hover,
+    &:focus-visible {
+      .glyph,
+      .reveal {
+        opacity: 0.9;
+      }
+    }
+  }
 }
 
 input {

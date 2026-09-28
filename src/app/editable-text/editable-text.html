@@ -17,9 +17,15 @@
     type="button"
     class="text"
     [class.empty]="!value()"
+    [class.quiet]="quiet() && !value()"
     [attr.aria-label]="label() || null"
     (click)="start()"
   >
-    {{ value() || placeholder() }}
+    @if (quiet() && !value()) {
+      <span class="glyph" aria-hidden="true">+</span>
+      <span class="reveal">{{ placeholder() }}</span>
+    } @else {
+      {{ value() || placeholder() }}
+    }
   </button>
 }

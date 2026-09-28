@@ -57,3 +57,18 @@ Edit `server/seed.json` before first start (or `data/chart.json` afterwards). Ea
 `id`, `name`, `row` (1 = top row, 2 = the auxiliaries row) and exactly four positions with keys
 `president`, `first`, `second`, `secretary`. Position titles are free text, which is how the Bishopric
 shows "Bishop" and "Executive Secretary".
+
+## Deploying on the cooperplanet webhost
+
+The app runs as a single container on the `10.42.12.0/24` subnet at `10.42.12.20`, which
+the webhost nginx proxies as `https://orgchart.cooperplanet.com`. See
+`docs/adding-a-service.md` in the `cooperplanet/webhost` repo for the overall pattern.
+
+On the server, from a checkout of this repo:
+
+```bash
+docker compose up -d --build
+```
+
+The container listens on port 80 and stores `chart.json` in the `./data` directory next to
+`compose.yml`, so the data survives rebuilds and restarts. Back it up by copying that file.

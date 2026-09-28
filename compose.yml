@@ -1,0 +1,18 @@
+# Deployed behind the cooperplanet webhost reverse proxy.
+# The webhost nginx proxies orgchart.cooperplanet.com to 10.42.12.20 (port 80).
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.42.12.0/24
+
+services:
+  app:
+    build: .
+    container_name: orgchart
+    networks:
+      default:
+        ipv4_address: 10.42.12.20
+    volumes:
+      - ./data:/app/data
+    restart: always

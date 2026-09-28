@@ -4,7 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
-import { Candidate, Position, PositionKey, Presidency, statusLabel } from '../models';
+import { StatusPill } from '../status-pill/status-pill';
+import { Candidate, Position, PositionKey, Presidency, Status, statusLabel } from '../models';
 import { OrgsService } from '../orgs.service';
 import {
   addProposed,
@@ -12,6 +13,7 @@ import {
   removeCandidate,
   renameCandidate,
   setPrimary,
+  setStatus,
 } from '../position-ops';
 
 const POLL_MS = 10_000;
@@ -19,7 +21,7 @@ const MAX_VISIBLE_PROPOSED = 2;
 
 @Component({
   selector: 'app-chart-view',
-  imports: [RouterLink, DatePipe, EditableText, DeleteOrg],
+  imports: [RouterLink, DatePipe, EditableText, DeleteOrg, StatusPill],
   templateUrl: './chart-view.html',
   styleUrl: './chart-view.scss',
 })
@@ -126,6 +128,10 @@ export class ChartView {
     this.service.updatePosition(this.orgId(), pres.id, key, (pos) =>
       renameCandidate(pos, candidate.id, name),
     );
+  }
+
+  protected setStatus(pres: Presidency, key: PositionKey, status: Status): void {
+    this.service.updatePosition(this.orgId(), pres.id, key, (pos) => setStatus(pos, status));
   }
 
   /** Moves a proposed name into the primary spot; the current primary drops to the top of the list. */

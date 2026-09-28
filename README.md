@@ -30,8 +30,9 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   - Add as many proposed names as you like.
   - **Consider** promotes a proposed name into the primary spot (status *Considered*). Whoever was
     there moves back to the top of the proposed list.
-  - Set the primary spot's status: **Considered** (yellow), **Agreed** (blue), **Called** (light green),
-    **Sustained** (dark green), **Set Apart** (dark green with a check mark).
+  - A small pill in the corner of every filled name box shows its status and drops down the choices:
+    **Considered** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
+    **Set Apart** (dark green with a check mark). It works on the chart and in the focused view.
   - Edit a name, move it back to proposed, or remove it. Every change saves immediately.
 - Data is stored as JSON on the server under `data/` and survives restarts.
 

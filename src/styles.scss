@@ -142,7 +142,6 @@ input[type='text'] {
   position: relative;
   border-radius: 10px;
   padding: 0.45em 0.7em;
-  padding-right: 1.6em;
   font-weight: 650;
   overflow-wrap: anywhere;
   background: var(--status-empty-bg);
@@ -164,15 +163,6 @@ input[type='text'] {
   &.status-setApart {
     background: var(--status-sustained-bg);
     color: var(--status-sustained-fg);
-  }
-
-  .check {
-    position: absolute;
-    top: 0.35em;
-    right: 0.45em;
-    width: 1.1em;
-    height: 1.1em;
-    display: block;
   }
 }
 

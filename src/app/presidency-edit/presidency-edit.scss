@@ -61,51 +61,13 @@
 
 .name-block {
   font-size: var(--pos-name, 1.5rem);
+  padding-right: 6.5rem; /* clear of the status pill */
 }
 
 .primary {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.statuses {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.status-btn {
-  flex: 1 1 auto;
-  min-height: 40px;
-  padding: 0.4em 0.7em;
-  font-size: 0.9rem;
-  border-width: 2px;
-  border-color: transparent;
-  background: var(--surface-2);
-  color: var(--muted);
-
-  &.active {
-    color: inherit;
-    font-weight: 650;
-  }
-  &.status-considered.active {
-    background: var(--status-considered-bg);
-    color: var(--status-considered-fg);
-  }
-  &.status-agreed.active {
-    background: var(--status-agreed-bg);
-    color: var(--status-agreed-fg);
-  }
-  &.status-called.active {
-    background: var(--status-called-bg);
-    color: var(--status-called-fg);
-  }
-  &.status-sustained.active,
-  &.status-setApart.active {
-    background: var(--status-sustained-bg);
-    color: var(--status-sustained-fg);
-  }
 }
 
 .primary-actions {
@@ -171,7 +133,6 @@
     grid-template-columns: repeat(4, 1fr);
     align-items: start;
   }
-  .status-btn,
   .primary-actions button {
     font-size: clamp(0.9rem, 1vw, 1.2rem);
   }

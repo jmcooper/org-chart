@@ -44,34 +44,7 @@
           <div class="primary">
             <div class="name-block" [class]="'status-' + p.status">
               {{ p.name }}
-              @if (p.status === 'setApart') {
-                <svg class="check" viewBox="0 0 24 24" aria-label="Set apart" role="img">
-                  <circle cx="12" cy="12" r="11" fill="#ffffff" />
-                  <path
-                    d="M6.5 12.5l3.5 3.5 7.5-8"
-                    fill="none"
-                    stroke="#2e7d32"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              }
-            </div>
-
-            <div class="statuses" role="group" [attr.aria-label]="'Status for ' + p.name">
-              @for (s of statuses; track s.value) {
-                <button
-                  type="button"
-                  class="status-btn"
-                  [class]="'status-btn status-' + s.value"
-                  [class.active]="s.value === p.status"
-                  [attr.aria-pressed]="s.value === p.status"
-                  (click)="setStatus(pos.key, s.value)"
-                >
-                  {{ s.label }}
-                </button>
-              }
+              <app-status-pill [status]="p.status" (change)="setStatus(pos.key, $event)" />
             </div>
 
             <div class="primary-actions">

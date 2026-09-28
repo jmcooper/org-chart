@@ -1,0 +1,40 @@
+<button
+  type="button"
+  class="pill"
+  (click)="toggle($event)"
+  [attr.aria-expanded]="open()"
+  aria-haspopup="menu"
+  [attr.aria-label]="'Status: ' + statusLabel(status()) + '. Change status'"
+>
+  @if (status() === 'setApart') {
+    <svg class="check" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M5 12.5l4.5 4.5 9.5-10"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  }
+  {{ statusLabel(status()) }}
+  <span class="caret" aria-hidden="true">▾</span>
+</button>
+
+@if (open()) {
+  <div class="menu" role="menu">
+    @for (s of statuses; track s.value) {
+      <button
+        type="button"
+        role="menuitemradio"
+        [attr.aria-checked]="s.value === status()"
+        [class.active]="s.value === status()"
+        (click)="choose(s.value)"
+      >
+        <span class="swatch" [class]="'swatch status-' + s.value"></span>
+        {{ s.label }}
+      </button>
+    }
+  </div>
+}

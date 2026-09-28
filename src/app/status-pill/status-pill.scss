@@ -1,0 +1,98 @@
+:host {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  z-index: 2;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.pill {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.25em 0.55em 0.25em 0.6em;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: currentColor;
+  background: color-mix(in srgb, currentColor 16%, transparent);
+  white-space: nowrap;
+
+  &:hover,
+  &[aria-expanded='true'] {
+    background: color-mix(in srgb, currentColor 28%, transparent);
+  }
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+  }
+
+  .check {
+    width: 1em;
+    height: 1em;
+  }
+  .caret {
+    font-size: 0.75em;
+    opacity: 0.8;
+  }
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 150px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--surface);
+    }
+    &.active {
+      font-weight: 700;
+    }
+  }
+
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+
+    &.status-considered {
+      background: var(--status-considered-bg);
+    }
+    &.status-agreed {
+      background: var(--status-agreed-bg);
+    }
+    &.status-called {
+      background: var(--status-called-bg);
+    }
+    &.status-sustained,
+    &.status-setApart {
+      background: var(--status-sustained-bg);
+    }
+  }
+}

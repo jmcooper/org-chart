@@ -1,5 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { StatusPill } from '../status-pill/status-pill';
 import { ChartService } from '../chart.service';
 import {
   addProposed,
@@ -21,7 +22,7 @@ import {
 
 @Component({
   selector: 'app-presidency-edit',
-  imports: [RouterLink],
+  imports: [RouterLink, StatusPill],
   templateUrl: './presidency-edit.html',
   styleUrl: './presidency-edit.scss',
 })

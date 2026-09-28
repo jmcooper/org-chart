@@ -1,5 +1,9 @@
 :host {
   display: block;
+  --pos-title: 1.1rem;
+  --pos-name: 1.5rem;
+  --pos-hint: 1rem;
+  --pos-add: 0.9rem;
 }
 
 .back {
@@ -42,77 +46,6 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  h2 {
-    font-size: var(--pos-title, 1.1rem);
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  h3 {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-}
-
-.name-block {
-  font-size: var(--pos-name, 1.5rem);
-}
-
-.primary {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.primary-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-
-  button {
-    flex: 1 1 auto;
-    font-size: 0.9rem;
-  }
-}
-
-.proposed {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--surface-2);
-    border-radius: 10px;
-    padding: 6px 6px 6px 12px;
-  }
-  .pname {
-    flex: 1 1 auto;
-    font-size: var(--proposed-name, 1.1rem);
-    font-weight: 500;
-    overflow-wrap: anywhere;
-    cursor: text;
-  }
-}
-
-.add {
-  display: flex;
-  gap: 8px;
-
-  input {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
 }
 
 @media (min-width: 720px) {
@@ -126,13 +59,11 @@
   :host {
     --pos-title: clamp(1rem, 1.3vw, 1.5rem);
     --pos-name: clamp(1.6rem, 2.4vw, 3rem);
-    --proposed-name: clamp(1.1rem, 1.5vw, 1.8rem);
+    --pos-hint: clamp(1.1rem, 1.5vw, 1.8rem);
+    --pos-add: clamp(0.9rem, 1.1vw, 1.3rem);
   }
   .positions {
     grid-template-columns: repeat(4, 1fr);
     align-items: start;
-  }
-  .primary-actions button {
-    font-size: clamp(0.9rem, 1vw, 1.2rem);
   }
 }

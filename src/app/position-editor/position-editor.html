@@ -1,0 +1,69 @@
+<div class="title">{{ pos().title }}</div>
+@if (pos().primary; as p) {
+  <div
+    class="name-block editable"
+    [class]="'editable status-' + p.status"
+    [title]="statusLabel(p.status)"
+  >
+    <app-editable-text
+      [value]="p.name"
+      [label]="pos().title + ': ' + p.name"
+      (commit)="rename(p, $event)"
+    />
+    <app-status-pill [status]="p.status" (change)="setStatus($event)" />
+  </div>
+} @else {
+  <div class="name-block empty editable">
+    <app-editable-text
+      value=""
+      placeholder="Add a name"
+      [quiet]="true"
+      [label]="'Add a name for ' + pos().title"
+      (commit)="setPrimary($event)"
+    />
+  </div>
+}
+<ul class="proposed">
+  @for (c of visible(); track c.id) {
+    <li class="candidate">
+      <app-editable-text
+        [value]="c.name"
+        [label]="'Proposed: ' + c.name"
+        (commit)="rename(c, $event)"
+      />
+      <button
+        type="button"
+        class="promote"
+        (click)="promote(c)"
+        [title]="'Move ' + c.name + ' to ' + pos().title"
+        [attr.aria-label]="'Move ' + c.name + ' to ' + pos().title"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 19V6M6 12l6-6 6 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </li>
+  }
+  @if (hiddenCount(); as more) {
+    <li>
+      <button type="button" class="more" (click)="expand()">+{{ more }} more…</button>
+    </li>
+  }
+  @if (pos().primary) {
+    <li class="add">
+      <app-editable-text
+        value=""
+        placeholder="+ Add name for consideration"
+        [label]="'Add another name for ' + pos().title"
+        (commit)="add($event)"
+      />
+    </li>
+  }
+</ul>

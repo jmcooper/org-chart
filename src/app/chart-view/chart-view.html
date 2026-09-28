@@ -5,18 +5,36 @@
 @if (service.loadError(); as err) {
   <div class="error">Could not load the chart: {{ err }}</div>
 }
+@if (service.saveState() === 'error') {
+  <div class="error">
+    Could not save: {{ service.saveError() }}. Check the connection and try again.
+  </div>
+}
 
 @if (service.chart()) {
   <main class="chart">
     @for (row of rows(); track $index) {
       <section class="row" [class.row-top]="$first" [class.row-orgs]="!$first">
         @for (pres of row; track pres.id) {
-          <a
-            class="org"
-            [routerLink]="['/o', orgId(), 'edit', pres.id]"
-            [attr.aria-label]="'Edit ' + pres.name"
-          >
-            <h2>{{ pres.name }}</h2>
+          <article class="org">
+            <a
+              class="focus"
+              [routerLink]="['/o', orgId(), 'edit', pres.id]"
+              [title]="'Open ' + pres.name"
+            >
+              <h2>{{ pres.name }}</h2>
+              <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" fill="currentColor" opacity="0.18" />
+                <path
+                  d="M10 7.5l4.5 4.5-4.5 4.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
             <ul class="positions">
               @for (pos of pres.positions; track pos.key) {
                 <li class="position">
@@ -27,7 +45,11 @@
                       [class]="'status-' + p.status"
                       [title]="statusLabel(p.status)"
                     >
-                      {{ p.name }}
+                      <app-editable-text
+                        [value]="p.name"
+                        [label]="pos.title + ': ' + p.name"
+                        (commit)="rename(pres, pos.key, p, $event)"
+                      />
                       @if (p.status === 'setApart') {
                         <svg class="check" viewBox="0 0 24 24" aria-label="Set apart" role="img">
                           <circle cx="12" cy="12" r="11" fill="#ffffff" />
@@ -45,28 +67,42 @@
                   } @else {
                     <div class="name-block empty">—</div>
                   }
-                  @if (pos.proposed.length > 0) {
-                    <ul class="proposed">
-                      @for (c of visibleProposed(pos); track c.id) {
-                        <li>{{ c.name }}</li>
-                      }
-                      @if (hiddenProposedCount(pos); as more) {
-                        <li class="more">+{{ more }} more…</li>
-                      }
-                    </ul>
-                  } @else if (!pos.primary) {
-                    <div class="proposed-hint">No names yet</div>
-                  }
+                  <ul class="proposed">
+                    @for (c of visibleProposed(pres, pos); track c.id) {
+                      <li>
+                        <app-editable-text
+                          [value]="c.name"
+                          [label]="'Proposed: ' + c.name"
+                          (commit)="rename(pres, pos.key, c, $event)"
+                        />
+                      </li>
+                    }
+                    @if (hiddenProposedCount(pres, pos); as more) {
+                      <li>
+                        <button type="button" class="more" (click)="expand(pres, pos)">
+                          +{{ more }} more…
+                        </button>
+                      </li>
+                    }
+                    <li class="add">
+                      <app-editable-text
+                        value=""
+                        placeholder="+ Add name"
+                        [label]="'Add a name for ' + pos.title"
+                        (commit)="add(pres, pos.key, $event)"
+                      />
+                    </li>
+                  </ul>
                 </li>
               }
             </ul>
-          </a>
+          </article>
         }
       </section>
     }
   </main>
   <p class="hint tap-hint">
-    Tap a presidency to edit it.
+    Tap a name to edit it. Tap a presidency's title to open it.
     @if (service.chart()?.updatedAt; as updatedAt) {
       · Updated {{ updatedAt | date: 'MMM d, h:mm a' }}
     }

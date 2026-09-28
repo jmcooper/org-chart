@@ -2,13 +2,20 @@ import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import {
+  addProposed,
+  demote,
+  promote,
+  removeCandidate,
+  renameCandidate,
+  setStatus,
+} from '../position-ops';
+import {
   Candidate,
   Presidency,
   Position,
   PositionKey,
   STATUSES,
   Status,
-  newId,
   statusLabel,
 } from '../models';
 
@@ -36,76 +43,42 @@ export class PresidencyEdit {
   protected addProposed(key: PositionKey, input: HTMLInputElement): void {
     const name = input.value.trim();
     if (!name) return;
-    this.update(key, (pos) => ({ ...pos, proposed: [...pos.proposed, { id: newId(), name }] }));
+    this.update(key, (pos) => addProposed(pos, name));
     input.value = '';
     input.focus();
   }
 
   protected removeProposed(key: PositionKey, candidate: Candidate): void {
-    this.update(key, (pos) => ({
-      ...pos,
-      proposed: pos.proposed.filter((c) => c.id !== candidate.id),
-    }));
+    this.update(key, (pos) => removeCandidate(pos, candidate.id));
   }
 
   /** Promote a proposed name to the primary spot as "Considered". */
   protected promote(key: PositionKey, candidate: Candidate): void {
-    this.update(key, (pos) => {
-      const proposed = pos.proposed.filter((c) => c.id !== candidate.id);
-      // Whoever was in the spot goes back to the top of the proposed list.
-      if (pos.primary) proposed.unshift({ id: pos.primary.id, name: pos.primary.name });
-      return {
-        ...pos,
-        primary: { id: candidate.id, name: candidate.name, status: 'considered' },
-        proposed,
-      };
-    });
+    this.update(key, (pos) => promote(pos, candidate));
   }
 
   protected setStatus(key: PositionKey, status: Status): void {
-    this.update(key, (pos) =>
-      pos.primary ? { ...pos, primary: { ...pos.primary, status } } : pos,
-    );
+    this.update(key, (pos) => setStatus(pos, status));
   }
 
   /** Move the primary name back to the proposed list. */
   protected demote(key: PositionKey): void {
-    this.update(key, (pos) =>
-      pos.primary
-        ? {
-            ...pos,
-            primary: null,
-            proposed: [{ id: pos.primary.id, name: pos.primary.name }, ...pos.proposed],
-          }
-        : pos,
-    );
+    this.update(key, demote);
   }
 
   protected removePrimary(key: PositionKey, pos: Position): void {
     if (!pos.primary) return;
     if (!confirm(`Remove ${pos.primary.name} from ${pos.title}?`)) return;
-    this.update(key, (p) => ({ ...p, primary: null }));
+    this.update(key, (p) => (p.primary ? removeCandidate(p, p.primary.id) : p));
   }
 
-  protected rename(key: PositionKey, candidate: Candidate, isPrimary: boolean): void {
+  protected rename(key: PositionKey, candidate: Candidate): void {
     const name = prompt('Edit name', candidate.name)?.trim();
     if (!name || name === candidate.name) return;
-    this.update(key, (pos) =>
-      isPrimary
-        ? { ...pos, primary: pos.primary ? { ...pos.primary, name } : null }
-        : {
-            ...pos,
-            proposed: pos.proposed.map((c) => (c.id === candidate.id ? { ...c, name } : c)),
-          },
-    );
+    this.update(key, (pos) => renameCandidate(pos, candidate.id, name));
   }
 
   private update(key: PositionKey, fn: (pos: Position) => Position): void {
-    const presidency = this.presidency();
-    if (!presidency) return;
-    void this.service.savePresidency(this.orgId(), {
-      ...presidency,
-      positions: presidency.positions.map((p) => (p.key === key ? fn(p) : p)),
-    });
+    this.service.updatePosition(this.orgId(), this.id(), key, fn);
   }
 }

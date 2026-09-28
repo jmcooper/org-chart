@@ -1,0 +1,25 @@
+@if (editing()) {
+  <input
+    #box
+    type="text"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [attr.aria-label]="label() || null"
+    autocomplete="off"
+    autocapitalize="words"
+    enterkeyhint="done"
+    (blur)="finish(box)"
+    (keydown.enter)="box.blur()"
+    (keydown.escape)="cancel(box); $event.stopPropagation()"
+  />
+} @else {
+  <button
+    type="button"
+    class="text"
+    [class.empty]="!value()"
+    [attr.aria-label]="label() || null"
+    (click)="start()"
+  >
+    {{ value() || placeholder() }}
+  </button>
+}

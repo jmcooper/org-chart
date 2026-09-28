@@ -19,24 +19,44 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 14px;
-  transition:
-    border-color 0.12s,
-    transform 0.12s;
+  padding: 10px 14px 14px;
+}
 
-  &:hover,
-  &:focus-visible {
-    border-color: var(--accent);
-    outline: none;
-  }
-  &:active {
-    transform: scale(0.99);
-  }
+/* The title is the way into the focused view, so it looks like a link row. */
+.focus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  min-height: 44px;
+  margin: 0 -6px 8px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  color: var(--text);
+  transition: background 0.12s;
 
   h2 {
     font-size: var(--org-title, 1.2rem);
-    margin-bottom: 10px;
-    text-align: center;
+  }
+  .chevron {
+    flex: 0 0 auto;
+    width: 1.1em;
+    height: 1.1em;
+    font-size: var(--org-title, 1.2rem);
+    color: var(--accent);
+  }
+  &:hover,
+  &:focus-visible {
+    background: var(--surface-2);
+    outline: none;
+
+    h2 {
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+  }
+  &:active {
+    transform: scale(0.98);
   }
 }
 
@@ -59,13 +79,10 @@
   .name-block {
     font-size: var(--pos-name, 1.15rem);
   }
-  .proposed-hint,
   .proposed {
     color: var(--muted);
     font-size: var(--pos-hint, 0.8rem);
-    margin-top: 3px;
-  }
-  .proposed {
+    margin: 3px 0 0;
     list-style: none;
     padding: 0 0 0 0.7em;
     display: grid;
@@ -75,7 +92,23 @@
       overflow-wrap: anywhere;
     }
     .more {
+      all: unset;
+      cursor: pointer;
       font-style: italic;
+      color: var(--accent);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .add {
+      color: var(--accent);
+      opacity: 0.75;
+
+      &:hover,
+      &:focus-within {
+        opacity: 1;
+      }
     }
   }
 }

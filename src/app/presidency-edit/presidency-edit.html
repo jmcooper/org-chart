@@ -75,7 +75,7 @@
             </div>
 
             <div class="primary-actions">
-              <button type="button" (click)="rename(pos.key, p, true)">Edit name</button>
+              <button type="button" (click)="rename(pos.key, p)">Edit name</button>
               <button type="button" (click)="demote(pos.key)">Back to proposed</button>
               <button type="button" class="danger" (click)="removePrimary(pos.key, pos)">
                 Remove
@@ -93,7 +93,7 @@
         <ul class="proposed">
           @for (c of pos.proposed; track c.id) {
             <li>
-              <span class="pname" (click)="rename(pos.key, c, false)" title="Tap to edit name">{{
+              <span class="pname" (click)="rename(pos.key, c)" title="Tap to edit name">{{
                 c.name
               }}</span>
               <button type="button" class="primary" (click)="promote(pos.key, c)">Consider</button>

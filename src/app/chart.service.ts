@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AuthService, messageFor } from './auth.service';
-import { OrgChart, Presidency } from './models';
+import { OrgChart, Position, PositionKey, Presidency } from './models';
 
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -82,6 +82,20 @@ export class ChartService {
       this.saveError.set(messageFor(err));
       this.saveState.set('error');
     }
+  }
+
+  /** Applies a change to one position of one presidency and saves it. */
+  updatePosition(
+    orgId: string,
+    presidencyId: string,
+    key: PositionKey,
+    fn: (pos: Position) => Position,
+  ): void {
+    const presidency = this.presidencies().find((p) => p.id === presidencyId);
+    if (!presidency || this.orgId() !== orgId) return;
+    const positions = presidency.positions.map((p) => (p.key === key ? fn(p) : p));
+    if (positions.every((p, i) => p === presidency.positions[i])) return; // nothing changed
+    void this.savePresidency(orgId, { ...presidency, positions });
   }
 
   /** An expired or revoked token sends the user back to the PIN screen. */

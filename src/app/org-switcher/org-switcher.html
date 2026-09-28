@@ -17,6 +17,9 @@
     }
     <hr />
     <button type="button" role="menuitem" (click)="choose('new')">New organization…</button>
+    <button type="button" role="menuitem" (click)="choose('lock')">
+      Lock {{ current()?.name ?? 'this organization' }}
+    </button>
     @if (archived().length > 0) {
       <button
         type="button"
@@ -35,8 +38,5 @@
         }
       }
     }
-    <button type="button" role="menuitem" (click)="choose('lock')">
-      Lock {{ current()?.name ?? 'this organization' }}
-    </button>
   </div>
 }

@@ -24,6 +24,11 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   tap a name to change it (clear it to remove it), or tap "+ Add name for consideration" under a position to propose
   someone. Tap a presidency's title (marked with a chevron) to open the focused view. The display
   polls the server every 10 seconds so edits made from a phone show up on the office screen.
+  - The up-arrow beside an additional name moves it into the primary spot as *Consider*; the person
+    who was there drops to the top of the list. Removing the primary moves the next name up.
+  - A small pill in the corner of every filled name box shows its status and drops down the choices:
+    **Consider** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
+    **Set Apart** (dark green with a check mark).
 - **Focused presidency** (`/o/:orgId/edit/:id`): the same editing as the chart, but one presidency at
   a time in large type for the office screen, with every additional name shown.
 - Data is stored as JSON on the server under `data/` and survives restarts.

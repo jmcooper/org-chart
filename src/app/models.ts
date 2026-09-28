@@ -38,6 +38,7 @@ export interface OrgChart {
 export interface Org {
   id: string;
   name: string;
+  archived: boolean;
 }
 
 export interface OrgList {

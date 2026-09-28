@@ -8,6 +8,9 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
 - **Organizations**: the app can hold several wards or branches. The root URL opens the default
   organization. A small text menu in the top-right corner switches between organizations, creates a
   new one, or locks the current one.
+- **Archiving**: a subtle link at the very bottom of the chart archives the current organization. Archived
+  organizations disappear from the switcher and are listed under an "Archived" entry there; choosing
+  one asks for confirmation, restores it, and switches to it. Data and PIN are kept.
 - **PIN protection**: every organization has a five-letter PIN. It must be entered before any of that
   organization's data is requested. A correct PIN yields a signed token (JWT) that the device keeps
   for 30 days; "Lock" in the corner menu forgets it. PINs are stored only as scrypt hashes and are
@@ -72,6 +75,8 @@ organization.
 | GET    | `/api/orgs`                           | none        | Organization ids and names, plus the default   |
 | POST   | `/api/orgs`                           | any org     | Create `{ name, pin }`; returns org and token  |
 | POST   | `/api/orgs/:orgId/login`              | none        | `{ pin }` → `{ token, expiresAt }`              |
+| POST   | `/api/orgs/:orgId/archive`            | that org    | Hide the organization from the switcher       |
+| POST   | `/api/orgs/:orgId/unarchive`          | that org    | Restore it                                    |
 | GET    | `/api/orgs/:orgId/chart`              | that org    | Whole chart                                   |
 | PUT    | `/api/orgs/:orgId/presidencies/:id`   | that org    | Replace one presidency; returns whole chart   |
 

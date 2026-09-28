@@ -83,7 +83,7 @@ function normalizeOrgName(input) {
 // ---------- organizations ----------
 
 /** What clients are allowed to see about an organization. Never the pin hash. */
-const publicOrg = (org) => ({ id: org.id, name: org.name });
+const publicOrg = (org) => ({ id: org.id, name: org.name, archived: org.archived === true });
 
 function slugFor(name, taken) {
   const base =
@@ -99,7 +99,13 @@ function slugFor(name, taken) {
 /** Must be called inside store.locked(). */
 async function createOrg(registry, name, pin) {
   const id = slugFor(name, new Set(registry.orgs.map((o) => o.id)));
-  const org = { id, name, pinHash: await hashPin(pin), createdAt: new Date().toISOString() };
+  const org = {
+    id,
+    name,
+    archived: false,
+    pinHash: await hashPin(pin),
+    createdAt: new Date().toISOString(),
+  };
   registry.orgs.push(org);
   if (!registry.defaultOrgId) registry.defaultOrgId = id;
   return org;
@@ -218,6 +224,31 @@ app.post('/api/orgs/:orgId/login', async (req, res, next) => {
     next(err);
   }
 });
+
+/** Archiving hides an organization from the switcher; its data and PIN are kept. */
+async function setArchived(req, res, next, archived) {
+  try {
+    const org = await store.locked(async () => {
+      const registry = await store.readOrgs();
+      const org = registry.orgs.find((o) => o.id === req.params.orgId);
+      if (!org) return null;
+      org.archived = archived;
+      await store.writeOrgs(registry);
+      return org;
+    });
+    if (!org) return res.status(404).json({ error: 'organization not found' });
+    res.json(publicOrg(org));
+  } catch (err) {
+    next(err);
+  }
+}
+
+app.post('/api/orgs/:orgId/archive', requireOrgToken, (req, res, next) =>
+  setArchived(req, res, next, true),
+);
+app.post('/api/orgs/:orgId/unarchive', requireOrgToken, (req, res, next) =>
+  setArchived(req, res, next, false),
+);
 
 app.get('/api/orgs/:orgId/chart', requireOrgToken, async (req, res, next) => {
   try {

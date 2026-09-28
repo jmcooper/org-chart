@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import { EditableText } from '../editable-text/editable-text';
 import { Candidate, Position, PositionKey, Presidency, statusLabel } from '../models';
+import { OrgsService } from '../orgs.service';
 import { addProposed, removeCandidate, renameCandidate } from '../position-ops';
 
 const POLL_MS = 10_000;
@@ -20,7 +21,12 @@ export class ChartView {
   readonly orgId = input.required<string>();
 
   protected readonly service = inject(ChartService);
+  protected readonly orgs = inject(OrgsService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly org = computed(() => this.orgs.byId(this.orgId()));
+  protected readonly archiveError = signal<string | null>(null);
 
   protected readonly rows = computed<Presidency[][]>(() => {
     const byRow = new Map<number, Presidency[]>();
@@ -67,6 +73,36 @@ export class ChartView {
 
   private isExpanded(pres: Presidency, pos: Position): boolean {
     return this.expanded().has(`${pres.id}/${pos.key}`);
+  }
+
+  // ---- archiving ----
+
+  protected async archive(): Promise<void> {
+    const org = this.org();
+    if (!org) return;
+    if (
+      !confirm(
+        `Archive ${org.name}? It will be hidden from the menu, and can be restored from "Archived" there.`,
+      )
+    )
+      return;
+    try {
+      await this.orgs.setArchived(org.id, true);
+      const next = this.orgs.active()[0];
+      if (next) await this.router.navigate(['/o', next.id]);
+    } catch (err) {
+      this.archiveError.set(err instanceof Error ? err.message : 'Could not archive');
+    }
+  }
+
+  protected async unarchive(): Promise<void> {
+    const org = this.org();
+    if (!org) return;
+    try {
+      await this.orgs.setArchived(org.id, false);
+    } catch (err) {
+      this.archiveError.set(err instanceof Error ? err.message : 'Could not restore');
+    }
   }
 
   // ---- inline edits ----

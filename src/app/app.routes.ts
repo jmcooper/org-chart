@@ -9,10 +9,9 @@ import { PresidencyEdit } from './presidency-edit/presidency-edit';
 /** The root URL shows the default organization. */
 const redirectToDefaultOrg: CanActivateFn = async () => {
   const router = inject(Router);
-  const list = await inject(OrgsService)
-    .load()
-    .catch(() => null);
-  const id = list?.defaultOrgId ?? list?.orgs[0]?.id;
+  const orgs = inject(OrgsService);
+  await orgs.load().catch(() => null);
+  const id = orgs.startId();
   return id ? router.createUrlTree(['/o', id]) : true;
 };
 

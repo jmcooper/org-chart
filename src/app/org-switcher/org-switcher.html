@@ -17,6 +17,24 @@
     }
     <hr />
     <button type="button" role="menuitem" (click)="choose('new')">New organization…</button>
+    @if (archived().length > 0) {
+      <button
+        type="button"
+        class="archived-toggle"
+        [attr.aria-expanded]="showArchived()"
+        (click)="showArchived.set(!showArchived())"
+      >
+        Archived ({{ archived().length }})
+        <span class="caret" aria-hidden="true">{{ showArchived() ? '▴' : '▾' }}</span>
+      </button>
+      @if (showArchived()) {
+        @for (o of archived(); track o.id) {
+          <button type="button" role="menuitem" class="archived-org" (click)="restore(o)">
+            {{ o.name }}
+          </button>
+        }
+      }
+    }
     <button type="button" role="menuitem" (click)="choose('lock')">
       Lock {{ current()?.name ?? 'this organization' }}
     </button>

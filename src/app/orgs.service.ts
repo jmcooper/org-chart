@@ -18,6 +18,21 @@ export class OrgsService {
   readonly list = signal<OrgList | null>(null);
   readonly error = signal<string | null>(null);
   readonly orgs = computed(() => this.list()?.orgs ?? []);
+  readonly active = computed(() => this.orgs().filter((o) => !o.archived));
+  readonly archived = computed(() => this.orgs().filter((o) => o.archived));
+
+  /** The organization the root URL should open: the default unless it is archived. */
+  readonly startId = computed(() => {
+    const list = this.list();
+    if (!list) return null;
+    const preferred = list.orgs.find((o) => o.id === list.defaultOrgId);
+    return (
+      (preferred && !preferred.archived
+        ? preferred
+        : (this.active()[0] ?? preferred ?? list.orgs[0])
+      )?.id ?? null
+    );
+  });
 
   private pending: Promise<OrgList> | null = null;
 
@@ -41,6 +56,18 @@ export class OrgsService {
 
   byId(id: string): Org | undefined {
     return this.orgs().find((o) => o.id === id);
+  }
+
+  async setArchived(id: string, archived: boolean): Promise<void> {
+    const action = archived ? 'archive' : 'unarchive';
+    try {
+      await firstValueFrom(
+        this.http.post<Org>(`/api/orgs/${encodeURIComponent(id)}/${action}`, {}),
+      );
+      await this.load(true);
+    } catch (err) {
+      throw new Error(messageFor(err));
+    }
   }
 
   /** Creates an organization and signs this device into it. Requires being signed into some org. */

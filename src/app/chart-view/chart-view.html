@@ -1,5 +1,8 @@
 <header class="topbar">
-  <h1>Ward Organization</h1>
+  <h1>{{ org()?.name ?? 'Organization' }}</h1>
+  @if (org()?.archived) {
+    <span class="badge">Archived</span>
+  }
 </header>
 
 @if (service.loadError(); as err) {
@@ -107,6 +110,18 @@
       · Updated {{ updatedAt | date: 'MMM d, h:mm a' }}
     }
   </p>
+  <footer class="page-end">
+    @if (archiveError(); as err) {
+      <div class="error">{{ err }}</div>
+    }
+    @if (org()?.archived) {
+      <button type="button" class="subtle" (click)="unarchive()">
+        Restore {{ org()?.name }} from the archive
+      </button>
+    } @else {
+      <button type="button" class="subtle" (click)="archive()">Archive {{ org()?.name }}</button>
+    }
+  </footer>
 } @else if (!service.loadError()) {
   <p class="hint">Loading…</p>
 }

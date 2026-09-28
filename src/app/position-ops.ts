@@ -22,9 +22,17 @@ export function renameCandidate(pos: Position, id: string, name: string): Positi
   return { ...pos, proposed: pos.proposed.map((c) => (c.id === id ? { ...c, name: trimmed } : c)) };
 }
 
-/** Removes a name entirely, whether it is the primary or a proposed one. */
+/**
+ * Removes a name entirely, whether it is the primary or a proposed one.
+ * Removing the primary moves the next proposed name up into the spot as "Considered".
+ */
 export function removeCandidate(pos: Position, id: string): Position {
-  if (pos.primary?.id === id) return { ...pos, primary: null };
+  if (pos.primary?.id === id) {
+    const [next, ...rest] = pos.proposed;
+    return next
+      ? { ...pos, primary: { id: next.id, name: next.name, status: 'considered' }, proposed: rest }
+      : { ...pos, primary: null };
+  }
   return { ...pos, proposed: pos.proposed.filter((c) => c.id !== id) };
 }
 

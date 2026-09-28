@@ -80,12 +80,30 @@
                   }
                   <ul class="proposed">
                     @for (c of visibleProposed(pres, pos); track c.id) {
-                      <li>
+                      <li class="candidate">
                         <app-editable-text
                           [value]="c.name"
                           [label]="'Proposed: ' + c.name"
                           (commit)="rename(pres, pos.key, c, $event)"
                         />
+                        <button
+                          type="button"
+                          class="promote"
+                          (click)="promote(pres, pos.key, c)"
+                          [title]="'Move ' + c.name + ' to ' + pos.title"
+                          [attr.aria-label]="'Move ' + c.name + ' to ' + pos.title"
+                        >
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                              d="M12 19V6M6 12l6-6 6 6"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2.4"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </button>
                       </li>
                     }
                     @if (hiddenProposedCount(pres, pos); as more) {

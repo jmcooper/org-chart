@@ -97,6 +97,42 @@
     li {
       overflow-wrap: anywhere;
     }
+    .candidate {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      app-editable-text {
+        flex: 1 1 auto;
+      }
+    }
+    .promote {
+      all: unset;
+      cursor: pointer;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      color: var(--muted);
+      opacity: 0.7;
+
+      svg {
+        width: 1.1em;
+        height: 1.1em;
+      }
+      &:hover,
+      &:focus-visible {
+        opacity: 1;
+        color: var(--accent);
+        background: var(--surface-2);
+      }
+      &:focus-visible {
+        outline: 2px solid var(--accent);
+      }
+    }
     .more {
       all: unset;
       cursor: pointer;

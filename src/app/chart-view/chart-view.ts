@@ -6,7 +6,13 @@ import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
 import { Candidate, Position, PositionKey, Presidency, statusLabel } from '../models';
 import { OrgsService } from '../orgs.service';
-import { addProposed, removeCandidate, renameCandidate, setPrimary } from '../position-ops';
+import {
+  addProposed,
+  promote,
+  removeCandidate,
+  renameCandidate,
+  setPrimary,
+} from '../position-ops';
 
 const POLL_MS = 10_000;
 const MAX_VISIBLE_PROPOSED = 2;
@@ -120,6 +126,11 @@ export class ChartView {
     this.service.updatePosition(this.orgId(), pres.id, key, (pos) =>
       renameCandidate(pos, candidate.id, name),
     );
+  }
+
+  /** Moves a proposed name into the primary spot; the current primary drops to the top of the list. */
+  protected promote(pres: Presidency, key: PositionKey, candidate: Candidate): void {
+    this.service.updatePosition(this.orgId(), pres.id, key, (pos) => promote(pos, candidate));
   }
 
   /** Typing into an empty primary box fills it directly as "Considered". */

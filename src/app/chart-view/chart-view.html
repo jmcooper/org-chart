@@ -121,7 +121,14 @@
     } @else {
       <button type="button" class="subtle" (click)="archive()">Archive {{ org()?.name }}</button>
     }
+    <span class="sep" aria-hidden="true">·</span>
+    <button type="button" class="subtle" (click)="confirmingDelete.set(true)">
+      Delete {{ org()?.name }}
+    </button>
   </footer>
+  @if (confirmingDelete() && org(); as org) {
+    <app-delete-org [org]="org" (close)="confirmingDelete.set(false)" />
+  }
 } @else if (!service.loadError()) {
   <p class="hint">Loading…</p>
 }

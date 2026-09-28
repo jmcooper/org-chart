@@ -1,0 +1,41 @@
+<div class="backdrop" (click)="close.emit()"></div>
+<form
+  class="dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="delete-org-title"
+  (submit)="submit($event)"
+>
+  <h2 id="delete-org-title">Delete {{ org().name }}?</h2>
+  <p>
+    This removes the organization and everything in it from the app. It will not appear anywhere in
+    the menu, even under Archived.
+  </p>
+  <label>
+    <span
+      >To confirm, type <strong class="required">{{ required() }}</strong></span
+    >
+    <input
+      #box
+      type="text"
+      autocomplete="off"
+      autocapitalize="characters"
+      autocorrect="off"
+      spellcheck="false"
+      [placeholder]="required()"
+      (input)="onInput(box)"
+      autofocus
+    />
+  </label>
+
+  @if (error(); as err) {
+    <p class="error-text" role="alert">{{ err }}</p>
+  }
+
+  <div class="actions">
+    <button type="button" (click)="close.emit()" [disabled]="busy()">Cancel</button>
+    <button type="submit" class="danger-fill" [disabled]="!matches() || busy()">
+      {{ busy() ? 'Deleting…' : 'Delete ' + org().name }}
+    </button>
+  </div>
+</form>

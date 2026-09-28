@@ -70,6 +70,21 @@ export class OrgsService {
     }
   }
 
+  /** Soft-deletes an organization. `confirmation` must be its name (case-insensitive). */
+  async delete(id: string, confirmation: string): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.http.delete<void>(`/api/orgs/${encodeURIComponent(id)}`, {
+          body: { confirm: confirmation },
+        }),
+      );
+      this.auth.clear(id);
+      await this.load(true);
+    } catch (err) {
+      throw new Error(messageFor(err));
+    }
+  }
+
   /** Creates an organization and signs this device into it. Requires being signed into some org. */
   async create(name: string, pin: string): Promise<Org> {
     const token = this.auth.anyToken();

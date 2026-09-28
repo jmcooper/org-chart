@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
+import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
 import { Candidate, Position, PositionKey, Presidency, statusLabel } from '../models';
 import { OrgsService } from '../orgs.service';
@@ -12,7 +13,7 @@ const MAX_VISIBLE_PROPOSED = 2;
 
 @Component({
   selector: 'app-chart-view',
-  imports: [RouterLink, DatePipe, EditableText],
+  imports: [RouterLink, DatePipe, EditableText, DeleteOrg],
   templateUrl: './chart-view.html',
   styleUrl: './chart-view.scss',
 })
@@ -27,6 +28,7 @@ export class ChartView {
 
   protected readonly org = computed(() => this.orgs.byId(this.orgId()));
   protected readonly archiveError = signal<string | null>(null);
+  protected readonly confirmingDelete = signal(false);
 
   protected readonly rows = computed<Presidency[][]>(() => {
     const byRow = new Map<number, Presidency[]>();

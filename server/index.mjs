@@ -82,6 +82,10 @@ function normalizeOrgName(input) {
 
 // ---------- organizations ----------
 
+/** Soft-deleted organizations stay in orgs.json (restorable by hand) but are invisible to the API. */
+const visibleOrgs = (registry) => registry.orgs.filter((o) => o.deleted !== true);
+const findVisible = (registry, id) => visibleOrgs(registry).find((o) => o.id === id);
+
 /** What clients are allowed to see about an organization. Never the pin hash. */
 const publicOrg = (org) => ({ id: org.id, name: org.name, archived: org.archived === true });
 
@@ -98,16 +102,17 @@ function slugFor(name, taken) {
 
 /** Must be called inside store.locked(). */
 async function createOrg(registry, name, pin) {
-  const id = slugFor(name, new Set(registry.orgs.map((o) => o.id)));
+  const id = slugFor(name, new Set(registry.orgs.map((o) => o.id))); // deleted ids stay reserved
   const org = {
     id,
     name,
     archived: false,
+    deleted: false,
     pinHash: await hashPin(pin),
     createdAt: new Date().toISOString(),
   };
   registry.orgs.push(org);
-  if (!registry.defaultOrgId) registry.defaultOrgId = id;
+  if (!findVisible(registry, registry.defaultOrgId)) registry.defaultOrgId = id;
   return org;
 }
 
@@ -115,7 +120,7 @@ async function createOrg(registry, name, pin) {
 async function bootstrap() {
   await store.locked(async () => {
     const registry = await store.readOrgs();
-    if (registry.orgs.length > 0) return;
+    if (visibleOrgs(registry).length > 0) return;
 
     let pin = normalizePin(process.env.DEFAULT_ORG_PIN);
     let generated = false;
@@ -146,7 +151,14 @@ function requireOrgToken(req, res, next) {
   if (!orgId || orgId !== req.params.orgId) {
     return res.status(401).json({ error: 'unauthorized' });
   }
-  return next();
+  store
+    .readOrgs()
+    .then((registry) => {
+      if (!findVisible(registry, orgId))
+        return res.status(404).json({ error: 'organization not found' });
+      next();
+    })
+    .catch(next);
 }
 
 /** Requires a valid token for any organization (used to create new ones). */
@@ -170,7 +182,9 @@ app.use('/api', (_req, res, next) => {
 app.get('/api/orgs', async (_req, res, next) => {
   try {
     const registry = await store.readOrgs();
-    res.json({ defaultOrgId: registry.defaultOrgId, orgs: registry.orgs.map(publicOrg) });
+    const orgs = visibleOrgs(registry);
+    const defaultOrgId = findVisible(registry, registry.defaultOrgId)?.id ?? orgs[0]?.id ?? null;
+    res.json({ defaultOrgId, orgs: orgs.map(publicOrg) });
   } catch (err) {
     next(err);
   }
@@ -185,7 +199,7 @@ app.post('/api/orgs', requireAnyToken, async (req, res, next) => {
 
     const org = await store.locked(async () => {
       const registry = await store.readOrgs();
-      if (registry.orgs.length >= MAX_ORGS) return null;
+      if (visibleOrgs(registry).length >= MAX_ORGS) return null;
       const org = await createOrg(registry, name, pin);
       await store.writeChart(org.id, await store.seedChart());
       await store.writeOrgs(registry);
@@ -212,7 +226,7 @@ app.post('/api/orgs/:orgId/login', async (req, res, next) => {
 
     const pin = normalizePin(req.body?.pin);
     const registry = await store.readOrgs();
-    const org = registry.orgs.find((o) => o.id === orgId);
+    const org = findVisible(registry, orgId);
     const ok = org && pin ? await verifyPin(pin, org.pinHash) : false;
     if (!ok) {
       limiter.fail(orgId, req.ip);
@@ -230,7 +244,7 @@ async function setArchived(req, res, next, archived) {
   try {
     const org = await store.locked(async () => {
       const registry = await store.readOrgs();
-      const org = registry.orgs.find((o) => o.id === req.params.orgId);
+      const org = findVisible(registry, req.params.orgId);
       if (!org) return null;
       org.archived = archived;
       await store.writeOrgs(registry);
@@ -249,6 +263,37 @@ app.post('/api/orgs/:orgId/archive', requireOrgToken, (req, res, next) =>
 app.post('/api/orgs/:orgId/unarchive', requireOrgToken, (req, res, next) =>
   setArchived(req, res, next, false),
 );
+
+/**
+ * Soft delete: the organization is flagged in orgs.json and disappears from the API and UI,
+ * but its entry and chart file stay on disk so an admin can restore it by hand.
+ */
+app.delete('/api/orgs/:orgId', requireOrgToken, async (req, res, next) => {
+  try {
+    const result = await store.locked(async () => {
+      const registry = await store.readOrgs();
+      const org = findVisible(registry, req.params.orgId);
+      if (!org) return 'missing';
+      const typed =
+        typeof req.body?.confirm === 'string' ? req.body.confirm.trim().toUpperCase() : '';
+      if (typed !== org.name.toUpperCase()) return 'confirm';
+      if (visibleOrgs(registry).length <= 1) return 'last';
+      org.deleted = true;
+      org.deletedAt = new Date().toISOString();
+      if (registry.defaultOrgId === org.id) registry.defaultOrgId = visibleOrgs(registry)[0].id;
+      await store.writeOrgs(registry);
+      return 'ok';
+    });
+    if (result === 'missing') return res.status(404).json({ error: 'organization not found' });
+    if (result === 'confirm')
+      return res.status(400).json({ error: 'Type the organization name exactly to confirm' });
+    if (result === 'last')
+      return res.status(409).json({ error: 'The last organization cannot be deleted' });
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.get('/api/orgs/:orgId/chart', requireOrgToken, async (req, res, next) => {
   try {

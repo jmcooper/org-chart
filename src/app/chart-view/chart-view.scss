@@ -133,13 +133,19 @@
   margin-top: 48px;
   text-align: center;
 
+  .sep {
+    color: var(--muted);
+    opacity: 0.5;
+    font-size: 0.75rem;
+  }
+
   .subtle {
     all: unset;
     cursor: pointer;
     color: var(--muted);
     font-size: 0.75rem;
     opacity: 0.6;
-    padding: 12px;
+    padding: 12px 8px;
 
     &:hover,
     &:focus-visible {

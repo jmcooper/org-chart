@@ -1,0 +1,79 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 20;
+}
+
+.dialog {
+  position: fixed;
+  z-index: 21;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 2 * var(--gutter)), 440px);
+  background: var(--surface);
+  border: 1px solid #7a2e38;
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .required {
+    color: var(--text);
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.05em;
+  }
+
+  input {
+    text-transform: uppercase;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .error-text {
+    margin: 0;
+    color: var(--danger);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    button {
+      min-width: 100px;
+    }
+  }
+
+  .danger-fill {
+    background: #b3261e;
+    border-color: #b3261e;
+    color: #fff;
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+      background: #d0332a;
+    }
+  }
+}

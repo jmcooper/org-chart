@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
-const ORG_URL = /^\/api\/orgs\/([^/]+)\//;
+const ORG_URL = /^\/api\/orgs\/([^/?#]+)(?:[/?#]|$)/;
 
 /** Attaches the organization's bearer token to requests for that organization's data. */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

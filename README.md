@@ -89,9 +89,10 @@ organization.
 ## Customizing the presidencies
 
 Edit `server/seed.json` before creating an organization (or `data/charts/<org-id>.json` afterwards).
-Each presidency has an `id`, `name`, `row` (1 = top row, 2 = the auxiliaries row) and exactly four
-positions with keys `president`, `first`, `second`, `secretary`. Position titles are free text, which
-is how the Bishopric shows "Bishop" and "Executive Secretary".
+Each presidency has an `id`, `name`, `row` (1 = top row, 2 = the auxiliaries row) and a list of
+positions, each with a unique `key` and a free-text `title`. That is how the Bishopric shows "Bishop",
+"Executive Secretary" and the three clerks. Positions added to the seed later are appended to existing
+charts the next time they are read, so adding a position is safe after data exists.
 
 ## Deploying on the cooperplanet webhost
 

@@ -1,6 +1,7 @@
 export type Status = 'considered' | 'agreed' | 'called' | 'sustained' | 'setApart';
 
-export type PositionKey = 'president' | 'first' | 'second' | 'secretary';
+/** Stable identifier of a position within a presidency, e.g. "president" or "ward-clerk". */
+export type PositionKey = string;
 
 export interface Candidate {
   id: string;

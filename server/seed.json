@@ -29,6 +29,24 @@
           "title": "Executive Secretary",
           "primary": null,
           "proposed": []
+        },
+        {
+          "key": "ward-clerk",
+          "title": "Ward Clerk",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "membership-clerk",
+          "title": "Membership Clerk",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "finance-clerk",
+          "title": "Finance Clerk",
+          "primary": null,
+          "proposed": []
         }
       ]
     },

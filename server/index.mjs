@@ -24,7 +24,8 @@ const TOKEN_TTL_DAYS = Number(process.env.TOKEN_TTL_DAYS) || 30;
 const DEFAULT_ORG_NAME = process.env.DEFAULT_ORG_NAME || 'Summerfield Ward';
 
 const STATUSES = new Set(['considered', 'agreed', 'called', 'sustained', 'setApart']);
-const POSITION_KEYS = ['president', 'first', 'second', 'secretary'];
+const POSITION_KEY = /^[a-z][a-z0-9-]{0,40}$/;
+const MAX_POSITIONS = 12;
 const MAX_ORGS = 200;
 
 const store = new Store(DATA_DIR, SEED_FILE);
@@ -48,7 +49,7 @@ function validateCandidate(c) {
 
 function validatePosition(p) {
   if (!p || typeof p !== 'object') return 'position must be an object';
-  if (!POSITION_KEYS.includes(p.key)) return `unknown position key "${p.key}"`;
+  if (!isStr(p.key, 41) || !POSITION_KEY.test(p.key)) return `invalid position key "${p.key}"`;
   if (!isStr(p.title) || !p.title.trim()) return 'position title required';
   if (p.primary !== null) {
     if (!validateCandidate(p.primary)) return 'invalid primary candidate';
@@ -64,12 +65,19 @@ function validatePresidency(pres) {
   if (!isStr(pres.id, 64) || !pres.id) return 'presidency id required';
   if (!isStr(pres.name) || !pres.name.trim()) return 'presidency name required';
   if (typeof pres.row !== 'number') return 'presidency row must be a number';
-  if (!Array.isArray(pres.positions) || pres.positions.length !== POSITION_KEYS.length) {
-    return `presidency must have exactly ${POSITION_KEYS.length} positions`;
+  if (
+    !Array.isArray(pres.positions) ||
+    pres.positions.length < 1 ||
+    pres.positions.length > MAX_POSITIONS
+  ) {
+    return `presidency must have between 1 and ${MAX_POSITIONS} positions`;
   }
+  const keys = new Set();
   for (const p of pres.positions) {
     const err = validatePosition(p);
     if (err) return err;
+    if (keys.has(p.key)) return `duplicate position key "${p.key}"`;
+    keys.add(p.key);
   }
   return null;
 }
@@ -78,6 +86,41 @@ function normalizeOrgName(input) {
   if (typeof input !== 'string') return null;
   const name = input.trim().replace(/\s+/g, ' ');
   return name.length >= 1 && name.length <= 60 ? name : null;
+}
+
+// ---------- charts ----------
+
+/**
+ * Positions added to the seed after a chart was created (for example the clerks in the
+ * bishopric) are appended to existing charts. Nothing is ever removed or reordered.
+ */
+function withSeedPositions(chart, seed) {
+  let changed = false;
+  const presidencies = chart.presidencies.map((pres) => {
+    const template = seed.presidencies.find((p) => p.id === pres.id);
+    if (!template) return pres;
+    const have = new Set(pres.positions.map((p) => p.key));
+    const missing = template.positions.filter((p) => !have.has(p.key));
+    if (missing.length === 0) return pres;
+    changed = true;
+    return {
+      ...pres,
+      positions: [
+        ...pres.positions,
+        ...missing.map((p) => ({ ...p, primary: null, proposed: [] })),
+      ],
+    };
+  });
+  return changed ? { ...chart, presidencies } : chart;
+}
+
+/** Reads a chart, bringing it up to date with the seed's positions (persisting if needed). */
+async function loadChart(orgId) {
+  const stored = await store.readChart(orgId);
+  if (!stored) return null;
+  const chart = withSeedPositions(stored, await store.seedChart());
+  if (chart !== stored) await store.writeChart(orgId, chart);
+  return chart;
 }
 
 // ---------- organizations ----------
@@ -297,7 +340,7 @@ app.delete('/api/orgs/:orgId', requireOrgToken, async (req, res, next) => {
 
 app.get('/api/orgs/:orgId/chart', requireOrgToken, async (req, res, next) => {
   try {
-    const chart = await store.readChart(req.params.orgId);
+    const chart = await store.locked(() => loadChart(req.params.orgId));
     if (!chart) return res.status(404).json({ error: 'organization not found' });
     res.json(chart);
   } catch (err) {
@@ -313,7 +356,7 @@ app.put('/api/orgs/:orgId/presidencies/:id', requireOrgToken, async (req, res, n
     if (pres.id !== req.params.id) return res.status(400).json({ error: 'id mismatch' });
 
     const chart = await store.locked(async () => {
-      const chart = await store.readChart(req.params.orgId);
+      const chart = await loadChart(req.params.orgId);
       if (!chart) return null;
       const idx = chart.presidencies.findIndex((p) => p.id === pres.id);
       if (idx === -1) return null;

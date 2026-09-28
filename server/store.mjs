@@ -50,16 +50,6 @@ export class Store {
   async seedChart() {
     return JSON.parse(await fs.readFile(this.seedFile, 'utf8'));
   }
-
-  /** The pre-multi-org data file, if one exists (migrated on first start). */
-  async readLegacyChart() {
-    return readJson(path.join(this.dataDir, 'chart.json'));
-  }
-
-  async archiveLegacyChart() {
-    const file = path.join(this.dataDir, 'chart.json');
-    await fs.rename(file, `${file}.migrated`);
-  }
 }
 
 async function readJson(file) {

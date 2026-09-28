@@ -105,7 +105,7 @@ async function createOrg(registry, name, pin) {
   return org;
 }
 
-/** First start: create the default organization, migrating a single-org data file if present. */
+/** First start: create the default organization with an empty chart. */
 async function bootstrap() {
   await store.locked(async () => {
     const registry = await store.readOrgs();
@@ -121,17 +121,7 @@ async function bootstrap() {
     }
 
     const org = await createOrg(registry, DEFAULT_ORG_NAME, pin);
-    const legacy = await store.readLegacyChart();
-    if (legacy?.organizations) {
-      await store.writeChart(org.id, {
-        updatedAt: legacy.updatedAt ?? null,
-        presidencies: legacy.organizations,
-      });
-      await store.archiveLegacyChart();
-      console.log(`Migrated data/chart.json into organization "${org.name}" (${org.id}).`);
-    } else {
-      await store.writeChart(org.id, await store.seedChart());
-    }
+    await store.writeChart(org.id, await store.seedChart());
     await store.writeOrgs(registry);
 
     console.log(`Created default organization "${org.name}" (${org.id}).`);
@@ -208,12 +198,10 @@ app.post('/api/orgs/:orgId/login', async (req, res, next) => {
     const wait = limiter.retryAfter(orgId, req.ip);
     if (wait > 0) {
       res.set('Retry-After', String(wait));
-      return res
-        .status(429)
-        .json({
-          error: `Too many attempts. Try again in ${Math.ceil(wait / 60)} min.`,
-          retryAfter: wait,
-        });
+      return res.status(429).json({
+        error: `Too many attempts. Try again in ${Math.ceil(wait / 60)} min.`,
+        retryAfter: wait,
+      });
     }
 
     const pin = normalizePin(req.body?.pin);

@@ -119,7 +119,6 @@ export class ChartView {
 
   protected rename(pres: Presidency, key: PositionKey, candidate: Candidate, name: string): void {
     if (!name) {
-      if (!confirm(`Remove ${candidate.name}?`)) return;
       this.service.updatePosition(this.orgId(), pres.id, key, (pos) =>
         removeCandidate(pos, candidate.id),
       );

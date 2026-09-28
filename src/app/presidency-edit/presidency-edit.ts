@@ -69,7 +69,6 @@ export class PresidencyEdit {
 
   protected removePrimary(key: PositionKey, pos: Position): void {
     if (!pos.primary) return;
-    if (!confirm(`Remove ${pos.primary.name} from ${pos.title}?`)) return;
     this.update(key, (p) => (p.primary ? removeCandidate(p, p.primary.id) : p));
   }
 

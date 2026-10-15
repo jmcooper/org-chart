@@ -7,7 +7,7 @@ import {
   promote,
   removeCandidate,
   renameCandidate,
-  removeEmptyPosition,
+  removePosition,
   renamePosition,
   setPrimary,
   setStatus,
@@ -31,7 +31,7 @@ export class PositionEditor {
   readonly pos = input.required<Position>();
   /** How many additional names to show before "+X more…"; null shows all. */
   readonly maxVisible = input<number | null>(2);
-  /** Callings in the "Other callings" section can be retitled, or removed by clearing the title. */
+  /** Callings in the "Other callings" section can be retitled and removed. */
   readonly titleEditable = input(false);
 
   private readonly service = inject(ChartService);
@@ -78,8 +78,26 @@ export class PositionEditor {
 
   protected retitle(title: string): void {
     const key = this.pos().key;
+    if (!title) return this.remove();
     this.service.updatePresidency(this.orgId(), this.presidency().id, (pres) =>
-      title ? renamePosition(pres, key, title) : removeEmptyPosition(pres, key),
+      renamePosition(pres, key, title),
+    );
+  }
+
+  /** Removes the calling. Asks first only when someone is listed for it. */
+  protected remove(): void {
+    const pos = this.pos();
+    const listed = (pos.primary ? 1 : 0) + pos.proposed.length;
+    if (
+      listed > 0 &&
+      !confirm(
+        `Remove ${pos.title}? ${listed === 1 ? 'The name' : 'The ' + listed + ' names'} listed for it will be removed too.`,
+      )
+    ) {
+      return;
+    }
+    this.service.updatePresidency(this.orgId(), this.presidency().id, (pres) =>
+      removePosition(pres, pos.key),
     );
   }
 

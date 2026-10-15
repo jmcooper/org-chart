@@ -25,9 +25,11 @@ export interface Position {
 export interface Presidency {
   id: string;
   name: string;
-  /** Layout row on the full chart: 1 = leadership (top), 2 = auxiliaries. */
+  /** Layout row on the full chart: 1 = leadership (top), 2 = auxiliaries, 3 = other callings. */
   row: number;
   positions: Position[];
+  /** Keys of seed positions deliberately removed, so the server does not add them back. */
+  removedKeys?: string[];
 }
 
 export interface OrgChart {

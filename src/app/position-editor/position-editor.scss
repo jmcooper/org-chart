@@ -13,6 +13,41 @@
   &.editable-title {
     --editable-padding: 0.15em 0.3em;
     margin-left: -0.3em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    app-editable-text {
+      flex: 1 1 auto;
+    }
+  }
+
+  .remove {
+    all: unset;
+    cursor: pointer;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    color: var(--muted);
+    opacity: 0.55;
+
+    svg {
+      width: 0.9em;
+      height: 0.9em;
+    }
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--danger);
+      background: var(--surface-2);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+    }
   }
 }
 .name-block {

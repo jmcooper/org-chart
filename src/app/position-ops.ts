@@ -79,10 +79,15 @@ export function addPosition(pres: Presidency, title: string): Presidency {
   const trimmed = title.trim();
   if (!trimmed) return pres;
   const key = slugKey(trimmed, new Set(pres.positions.map((p) => p.key)));
-  return {
+  // Re-adding a calling with a key that was removed earlier un-removes it.
+  const removedKeys = (pres.removedKeys ?? []).filter((k) => k !== key);
+  const next: Presidency = {
     ...pres,
     positions: [...pres.positions, { key, title: trimmed, primary: null, proposed: [] }],
   };
+  if (removedKeys.length) next.removedKeys = removedKeys;
+  else delete next.removedKeys;
+  return next;
 }
 
 export function renamePosition(pres: Presidency, key: string, title: string): Presidency {
@@ -94,9 +99,9 @@ export function renamePosition(pres: Presidency, key: string, title: string): Pr
   };
 }
 
-/** Removes a calling only while nobody is listed for it. */
-export function removeEmptyPosition(pres: Presidency, key: string): Presidency {
-  const pos = pres.positions.find((p) => p.key === key);
-  if (!pos || pos.primary || pos.proposed.length > 0) return pres;
-  return { ...pres, positions: pres.positions.filter((p) => p.key !== key) };
+/** Removes a calling and everyone listed for it. */
+export function removePosition(pres: Presidency, key: string): Presidency {
+  if (!pres.positions.some((p) => p.key === key)) return pres;
+  const removedKeys = [...new Set([...(pres.removedKeys ?? []), key])];
+  return { ...pres, positions: pres.positions.filter((p) => p.key !== key), removedKeys };
 }

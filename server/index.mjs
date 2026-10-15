@@ -70,6 +70,12 @@ function validatePresidency(pres) {
   if (!Array.isArray(pres.positions) || pres.positions.length > MAX_POSITIONS) {
     return `presidency may have at most ${MAX_POSITIONS} positions`;
   }
+  if (pres.removedKeys !== undefined) {
+    if (!Array.isArray(pres.removedKeys) || pres.removedKeys.length > 100)
+      return 'removedKeys must be an array';
+    if (!pres.removedKeys.every((k) => isStr(k, 41) && POSITION_KEY.test(k)))
+      return 'invalid removed key';
+  }
   const keys = new Set();
   for (const p of pres.positions) {
     const err = validatePosition(p);
@@ -97,7 +103,7 @@ function withSeedPositions(chart, seed) {
   let presidencies = chart.presidencies.map((pres) => {
     const template = seed.presidencies.find((p) => p.id === pres.id);
     if (!template) return pres;
-    const have = new Set(pres.positions.map((p) => p.key));
+    const have = new Set([...pres.positions.map((p) => p.key), ...(pres.removedKeys ?? [])]);
     const missing = template.positions.filter((p) => !have.has(p.key));
     if (missing.length === 0) return pres;
     changed = true;

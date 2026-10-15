@@ -1,4 +1,14 @@
-<div class="title">{{ pos().title }}</div>
+@if (titleEditable()) {
+  <div class="title editable-title">
+    <app-editable-text
+      [value]="pos().title"
+      [label]="'Calling title: ' + pos().title"
+      (commit)="retitle($event)"
+    />
+  </div>
+} @else {
+  <div class="title">{{ pos().title }}</div>
+}
 @if (pos().primary; as p) {
   <div
     class="name-block editable"

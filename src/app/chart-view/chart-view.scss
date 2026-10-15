@@ -111,6 +111,39 @@
   .row {
     margin-top: 10px;
   }
+
+  .add-calling {
+    color: var(--accent);
+    opacity: 0.75;
+    font-size: var(--pos-add, 0.8rem);
+    --editable-padding: 0.3em 0.4em;
+    --editable-min-height: 36px;
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
+  }
+
+  .add-section {
+    border-style: dashed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-height: 120px;
+    color: var(--accent);
+    font-size: var(--org-title, 1.2rem);
+    font-weight: 600;
+    text-align: center;
+    --editable-padding: 0.4em 0.6em;
+
+    .hint {
+      margin: 0;
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+  }
 }
 
 .tap-hint {

@@ -25,7 +25,9 @@ const DEFAULT_ORG_NAME = process.env.DEFAULT_ORG_NAME || 'Summerfield Ward';
 
 const STATUSES = new Set(['considered', 'agreed', 'called', 'sustained', 'setApart']);
 const POSITION_KEY = /^[a-z][a-z0-9-]{0,40}$/;
-const MAX_POSITIONS = 12;
+const MAX_POSITIONS = 20;
+const MAX_PRESIDENCIES = 40;
+const CALLINGS_ROW = 3;
 const MAX_ORGS = 200;
 
 const store = new Store(DATA_DIR, SEED_FILE);
@@ -65,12 +67,8 @@ function validatePresidency(pres) {
   if (!isStr(pres.id, 64) || !pres.id) return 'presidency id required';
   if (!isStr(pres.name) || !pres.name.trim()) return 'presidency name required';
   if (typeof pres.row !== 'number') return 'presidency row must be a number';
-  if (
-    !Array.isArray(pres.positions) ||
-    pres.positions.length < 1 ||
-    pres.positions.length > MAX_POSITIONS
-  ) {
-    return `presidency must have between 1 and ${MAX_POSITIONS} positions`;
+  if (!Array.isArray(pres.positions) || pres.positions.length > MAX_POSITIONS) {
+    return `presidency may have at most ${MAX_POSITIONS} positions`;
   }
   const keys = new Set();
   for (const p of pres.positions) {
@@ -340,6 +338,29 @@ app.delete('/api/orgs/:orgId', requireOrgToken, async (req, res, next) => {
     if (result === 'last')
       return res.status(409).json({ error: 'The last organization cannot be deleted' });
     res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** Adds an empty group to the "Other callings" section. */
+app.post('/api/orgs/:orgId/presidencies', requireOrgToken, async (req, res, next) => {
+  try {
+    const name = normalizeOrgName(req.body?.name);
+    if (!name) return res.status(400).json({ error: 'Name must be 1–60 characters' });
+    const chart = await store.locked(async () => {
+      const chart = await loadChart(req.params.orgId);
+      if (!chart) return null;
+      if (chart.presidencies.length >= MAX_PRESIDENCIES) return 'full';
+      const id = slugFor(name, new Set(chart.presidencies.map((p) => p.id)));
+      chart.presidencies.push({ id, name, row: CALLINGS_ROW, positions: [] });
+      chart.updatedAt = new Date().toISOString();
+      await store.writeChart(req.params.orgId, chart);
+      return chart;
+    });
+    if (!chart) return res.status(404).json({ error: 'organization not found' });
+    if (chart === 'full') return res.status(409).json({ error: 'Too many sections' });
+    res.status(201).json(chart);
   } catch (err) {
     next(err);
   }

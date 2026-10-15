@@ -103,12 +103,34 @@
               <ul class="positions">
                 @for (pos of group.positions; track pos.key) {
                   <li>
-                    <app-position-editor [orgId]="orgId()" [presidency]="group" [pos]="pos" />
+                    <app-position-editor
+                      [orgId]="orgId()"
+                      [presidency]="group"
+                      [pos]="pos"
+                      [titleEditable]="true"
+                    />
                   </li>
                 }
+                <li class="add-calling">
+                  <app-editable-text
+                    value=""
+                    placeholder="+ Add calling"
+                    [label]="'Add a calling to ' + group.name"
+                    (commit)="addCalling(group, $event)"
+                  />
+                </li>
               </ul>
             </article>
           }
+          <article class="org add-section">
+            <app-editable-text
+              value=""
+              placeholder="+ Add section"
+              label="Add a section to Other callings"
+              (commit)="addSection($event)"
+            />
+            <p class="hint">A section groups callings, e.g. an organization or a committee.</p>
+          </article>
         </div>
       }
     </section>

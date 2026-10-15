@@ -3,7 +3,9 @@ import { Component, DestroyRef, computed, inject, input, signal } from '@angular
 import { Router, RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import { DeleteOrg } from '../delete-org/delete-org';
+import { EditableText } from '../editable-text/editable-text';
 import { PositionEditor } from '../position-editor/position-editor';
+import { addPosition } from '../position-ops';
 import { Presidency } from '../models';
 import { OrgsService } from '../orgs.service';
 
@@ -13,7 +15,7 @@ const CALLINGS_OPEN_KEY = 'orgchart.callingsOpen';
 
 @Component({
   selector: 'app-chart-view',
-  imports: [RouterLink, DatePipe, DeleteOrg, PositionEditor],
+  imports: [RouterLink, DatePipe, DeleteOrg, PositionEditor, EditableText],
   templateUrl: './chart-view.html',
   styleUrl: './chart-view.scss',
 })
@@ -68,6 +70,17 @@ export class ChartView {
     } catch {
       // Storage may be unavailable; the section simply starts collapsed next time.
     }
+  }
+
+  // ---- other callings: sections and callings can be added here ----
+
+  protected addCalling(group: Presidency, title: string): void {
+    if (title)
+      this.service.updatePresidency(this.orgId(), group.id, (pres) => addPosition(pres, title));
+  }
+
+  protected addSection(name: string): void {
+    if (name) void this.service.addGroup(this.orgId(), name);
   }
 
   // ---- archiving ----

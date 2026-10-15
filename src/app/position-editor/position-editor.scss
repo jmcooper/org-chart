@@ -9,6 +9,11 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 4px;
+
+  &.editable-title {
+    --editable-padding: 0.15em 0.3em;
+    margin-left: -0.3em;
+  }
 }
 .name-block {
   font-size: var(--pos-name, 1.15rem);

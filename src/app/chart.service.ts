@@ -84,6 +84,37 @@ export class ChartService {
     }
   }
 
+  /** Applies a change to a whole presidency (its positions list or name) and saves it. */
+  updatePresidency(
+    orgId: string,
+    presidencyId: string,
+    fn: (pres: Presidency) => Presidency,
+  ): void {
+    const presidency = this.presidencies().find((p) => p.id === presidencyId);
+    if (!presidency || this.orgId() !== orgId) return;
+    const next = fn(presidency);
+    if (next !== presidency) void this.savePresidency(orgId, next);
+  }
+
+  /** Adds an empty group to the "Other callings" section. */
+  async addGroup(orgId: string, name: string): Promise<void> {
+    this.saveState.set('saving');
+    try {
+      const chart = await firstValueFrom(
+        this.http.post<OrgChart>(`/api/orgs/${encodeURIComponent(orgId)}/presidencies`, { name }),
+      );
+      if (this.orgId() !== orgId) return;
+      this.chart.set(chart);
+      this.saveError.set(null);
+      this.saveState.set('saved');
+      this.saveTimer = setTimeout(() => this.saveState.set('idle'), 1500);
+    } catch (err) {
+      this.handleUnauthorized(orgId, err);
+      this.saveError.set(messageFor(err));
+      this.saveState.set('error');
+    }
+  }
+
   /** Applies a change to one position of one presidency and saves it. */
   updatePosition(
     orgId: string,

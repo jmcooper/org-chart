@@ -48,6 +48,17 @@
   padding: 14px;
 }
 
+.add-calling {
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  min-height: 80px;
+  color: var(--accent);
+  font-size: var(--pos-hint, 1rem);
+  font-weight: 600;
+  --editable-padding: 0.4em 0.6em;
+}
+
 @media (min-width: 720px) {
   .positions {
     grid-template-columns: repeat(2, 1fr);

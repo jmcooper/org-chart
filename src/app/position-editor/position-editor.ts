@@ -7,6 +7,8 @@ import {
   promote,
   removeCandidate,
   renameCandidate,
+  removeEmptyPosition,
+  renamePosition,
   setPrimary,
   setStatus,
 } from '../position-ops';
@@ -29,6 +31,8 @@ export class PositionEditor {
   readonly pos = input.required<Position>();
   /** How many additional names to show before "+X more…"; null shows all. */
   readonly maxVisible = input<number | null>(2);
+  /** Callings in the "Other callings" section can be retitled, or removed by clearing the title. */
+  readonly titleEditable = input(false);
 
   private readonly service = inject(ChartService);
   protected readonly statusLabel = statusLabel;
@@ -70,6 +74,13 @@ export class PositionEditor {
 
   protected setStatus(status: Status): void {
     this.update((pos) => setStatus(pos, status));
+  }
+
+  protected retitle(title: string): void {
+    const key = this.pos().key;
+    this.service.updatePresidency(this.orgId(), this.presidency().id, (pres) =>
+      title ? renamePosition(pres, key, title) : removeEmptyPosition(pres, key),
+    );
   }
 
   private update(fn: (pos: Position) => Position): void {

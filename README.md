@@ -32,7 +32,10 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
 - **Other callings**: a collapsible section at the bottom of the chart holds non-presidency callings
   grouped by organization (Relief Society, Primary, Sunday School, Young Men, Young Women). Each
   group works exactly like a presidency card. The section starts collapsed and remembers its state
-  on the device.
+  on the device. Sections and callings can be added here (and only here): "+ Add section" at the end
+  of the grid creates a group, "+ Add calling" at the bottom of a group adds a position, and a
+  calling's title can be edited in place. Clearing a title removes the calling while nobody is listed
+  for it.
 - **Focused presidency** (`/o/:orgId/edit/:id`): the same editing as the chart, but one presidency at
   a time in large type for the office screen, with every additional name shown.
 - Data is stored as JSON on the server under `data/` and survives restarts.
@@ -87,6 +90,7 @@ organization.
 | DELETE | `/api/orgs/:orgId`                    | that org    | Soft delete; body `{ confirm: name }`          |
 | GET    | `/api/orgs/:orgId/chart`              | that org    | Whole chart                                   |
 | PUT    | `/api/orgs/:orgId/presidencies/:id`   | that org    | Replace one presidency; returns whole chart   |
+| POST   | `/api/orgs/:orgId/presidencies`       | that org    | Add an "Other callings" group `{ name }`       |
 
 ## Customizing the presidencies
 

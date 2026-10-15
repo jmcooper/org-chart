@@ -43,6 +43,17 @@
           [presidency]="presidency"
           [pos]="pos"
           [maxVisible]="null"
+          [titleEditable]="isGroup()"
+        />
+      </section>
+    }
+    @if (isGroup()) {
+      <section class="position add-calling">
+        <app-editable-text
+          value=""
+          placeholder="+ Add calling"
+          [label]="'Add a calling to ' + presidency.name"
+          (commit)="addCalling($event)"
         />
       </section>
     }

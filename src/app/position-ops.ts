@@ -1,4 +1,4 @@
-import { Candidate, Position, Status, newId } from './models';
+import { Candidate, Position, Presidency, Status, newId } from './models';
 
 /** Pure transformations of a position. Each returns a new Position; nothing is mutated. */
 
@@ -60,4 +60,43 @@ export function demote(pos: Position): Position {
 
 export function setStatus(pos: Position, status: Status): Position {
   return pos.primary ? { ...pos, primary: { ...pos.primary, status } } : pos;
+}
+
+// ---- callings within a group (the "Other callings" section) ----
+
+function slugKey(title: string, taken: Set<string>): string {
+  const base =
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'calling';
+  let key = base;
+  for (let n = 2; taken.has(key); n++) key = `${base}-${n}`;
+  return key;
+}
+
+export function addPosition(pres: Presidency, title: string): Presidency {
+  const trimmed = title.trim();
+  if (!trimmed) return pres;
+  const key = slugKey(trimmed, new Set(pres.positions.map((p) => p.key)));
+  return {
+    ...pres,
+    positions: [...pres.positions, { key, title: trimmed, primary: null, proposed: [] }],
+  };
+}
+
+export function renamePosition(pres: Presidency, key: string, title: string): Presidency {
+  const trimmed = title.trim();
+  if (!trimmed) return pres;
+  return {
+    ...pres,
+    positions: pres.positions.map((p) => (p.key === key ? { ...p, title: trimmed } : p)),
+  };
+}
+
+/** Removes a calling only while nobody is listed for it. */
+export function removeEmptyPosition(pres: Presidency, key: string): Presidency {
+  const pos = pres.positions.find((p) => p.key === key);
+  if (!pos || pos.primary || pos.proposed.length > 0) return pres;
+  return { ...pres, positions: pres.positions.filter((p) => p.key !== key) };
 }

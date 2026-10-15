@@ -8,6 +8,8 @@ import { Presidency } from '../models';
 import { OrgsService } from '../orgs.service';
 
 const POLL_MS = 10_000;
+const CALLINGS_ROW = 3;
+const CALLINGS_OPEN_KEY = 'orgchart.callingsOpen';
 
 @Component({
   selector: 'app-chart-view',
@@ -25,12 +27,17 @@ export class ChartView {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly org = computed(() => this.orgs.byId(this.orgId()));
+  protected readonly callingGroups = computed(() =>
+    this.service.presidencies().filter((p) => p.row === CALLINGS_ROW),
+  );
+  protected readonly callingsOpen = signal(readFlag(CALLINGS_OPEN_KEY));
   protected readonly archiveError = signal<string | null>(null);
   protected readonly confirmingDelete = signal(false);
 
+  /** Row 3 holds groups of non-presidency callings, shown in the collapsible section. */
   protected readonly rows = computed<Presidency[][]>(() => {
     const byRow = new Map<number, Presidency[]>();
-    for (const pres of this.service.presidencies()) {
+    for (const pres of this.service.presidencies().filter((p) => p.row !== CALLINGS_ROW)) {
       const list = byRow.get(pres.row) ?? [];
       list.push(pres);
       byRow.set(pres.row, list);
@@ -52,6 +59,15 @@ export class ChartView {
       clearInterval(timer);
       document.removeEventListener('visibilitychange', refresh);
     });
+  }
+
+  protected toggleCallings(): void {
+    this.callingsOpen.update((v) => !v);
+    try {
+      localStorage.setItem(CALLINGS_OPEN_KEY, String(this.callingsOpen()));
+    } catch {
+      // Storage may be unavailable; the section simply starts collapsed next time.
+    }
   }
 
   // ---- archiving ----
@@ -82,5 +98,13 @@ export class ChartView {
     } catch (err) {
       this.archiveError.set(err instanceof Error ? err.message : 'Could not restore');
     }
+  }
+}
+
+function readFlag(key: string): boolean {
+  try {
+    return localStorage.getItem(key) === 'true';
+  } catch {
+    return false;
   }
 }

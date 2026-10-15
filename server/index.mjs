@@ -91,12 +91,12 @@ function normalizeOrgName(input) {
 // ---------- charts ----------
 
 /**
- * Positions added to the seed after a chart was created (for example the clerks in the
- * bishopric) are appended to existing charts. Nothing is ever removed or reordered.
+ * Positions or groups added to the seed after a chart was created (for example the clerks
+ * in the bishopric) are appended to existing charts. Nothing is ever removed or reordered.
  */
 function withSeedPositions(chart, seed) {
   let changed = false;
-  const presidencies = chart.presidencies.map((pres) => {
+  let presidencies = chart.presidencies.map((pres) => {
     const template = seed.presidencies.find((p) => p.id === pres.id);
     if (!template) return pres;
     const have = new Set(pres.positions.map((p) => p.key));
@@ -111,6 +111,13 @@ function withSeedPositions(chart, seed) {
       ],
     };
   });
+  // Whole presidencies or calling groups that are new in the seed are added at the end.
+  const have = new Set(presidencies.map((p) => p.id));
+  const newOnes = seed.presidencies.filter((p) => !have.has(p.id));
+  if (newOnes.length > 0) {
+    changed = true;
+    presidencies = [...presidencies, ...structuredClone(newOnes)];
+  }
   return changed ? { ...chart, presidencies } : chart;
 }
 

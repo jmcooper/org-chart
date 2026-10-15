@@ -29,6 +29,10 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   - A small pill in the corner of every filled name box shows its status and drops down the choices:
     **Consider** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
     **Set Apart** (dark green with a check mark).
+- **Other callings**: a collapsible section at the bottom of the chart holds non-presidency callings
+  grouped by organization (Relief Society, Primary, Sunday School, Young Men, Young Women). Each
+  group works exactly like a presidency card. The section starts collapsed and remembers its state
+  on the device.
 - **Focused presidency** (`/o/:orgId/edit/:id`): the same editing as the chart, but one presidency at
   a time in large type for the office screen, with every additional name shown.
 - Data is stored as JSON on the server under `data/` and survives restarts.
@@ -87,7 +91,8 @@ organization.
 ## Customizing the presidencies
 
 Edit `server/seed.json` before creating an organization (or `data/charts/<org-id>.json` afterwards).
-Each presidency has an `id`, `name`, `row` (1 = top row, 2 = the auxiliaries row) and a list of
+Each presidency has an `id`, `name`, `row` (1 = top row, 2 = the auxiliaries row, 3 = a group in the
+collapsible "Other callings" section) and a list of
 positions, each with a unique `key` and a free-text `title`. That is how the Bishopric shows "Bishop",
 "Executive Secretary" and the three clerks. Positions added to the seed later are appended to existing
 charts the next time they are read, so adding a position is safe after data exists.

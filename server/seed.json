@@ -204,6 +204,161 @@
           "proposed": []
         }
       ]
+    },
+    {
+      "id": "relief-society-callings",
+      "name": "Relief Society",
+      "row": 3,
+      "positions": [
+        {
+          "key": "rs-ministering-secretary",
+          "title": "RS Ministering Secretary",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "rs-activity-committee-member-1",
+          "title": "RS Activity Committee Member 1",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "rs-service-coordinator",
+          "title": "RS Service Coordinator",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "rs-activity-committee-member-2",
+          "title": "RS Activity Committee Member 2",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "rs-activity-committee-member-3",
+          "title": "RS Activity Committee Member 3",
+          "primary": null,
+          "proposed": []
+        }
+      ]
+    },
+    {
+      "id": "primary-callings",
+      "name": "Primary",
+      "row": 3,
+      "positions": [
+        {
+          "key": "primary-pianist",
+          "title": "Primary Pianist",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "sunbeam-ctr-4-teacher",
+          "title": "Sunbeam/CTR 4 Teacher",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "additional-teacher-1",
+          "title": "Additional Teacher 1",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "additional-teacher-2",
+          "title": "Additional Teacher 2",
+          "primary": null,
+          "proposed": []
+        }
+      ]
+    },
+    {
+      "id": "sunday-school-callings",
+      "name": "Sunday School",
+      "row": 3,
+      "positions": [
+        {
+          "key": "course-14-15-teacher",
+          "title": "Course 14-15 Teacher",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "course-14-15-teacher-2",
+          "title": "Course 14-15 Teacher",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "course-16-17-teacher",
+          "title": "Course 16-17 Teacher",
+          "primary": null,
+          "proposed": []
+        }
+      ]
+    },
+    {
+      "id": "young-men-callings",
+      "name": "Young Men",
+      "row": 3,
+      "positions": [
+        {
+          "key": "teachers-quorum-specialist",
+          "title": "Teachers Quorum Specialist",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "deacons-quorum-specialist",
+          "title": "Deacons Quorum Specialist",
+          "primary": null,
+          "proposed": []
+        }
+      ]
+    },
+    {
+      "id": "young-women-callings",
+      "name": "Young Women",
+      "row": 3,
+      "positions": [
+        {
+          "key": "gatherers-class-advisor",
+          "title": "Gatherers Class Advisor",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "gatherers-class-specialist",
+          "title": "Gatherers Class Specialist",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "messengers-class-advisor",
+          "title": "Messengers Class Advisor",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "messengers-class-specialist",
+          "title": "Messengers Class Specialist",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "builders-class-advisor",
+          "title": "Builders Class Advisor",
+          "primary": null,
+          "proposed": []
+        },
+        {
+          "key": "builders-class-specialist",
+          "title": "Builders Class Specialist",
+          "primary": null,
+          "proposed": []
+        }
+      ]
     }
   ]
 }

@@ -68,6 +68,51 @@
   gap: 10px;
 }
 
+.callings {
+  margin-top: 22px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+
+  .callings-toggle {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    padding: 6px 4px;
+    border-radius: 10px;
+
+    h2 {
+      font-size: var(--org-title, 1.2rem);
+    }
+    .hint {
+      margin-left: auto;
+    }
+    .disclosure {
+      width: 1.1em;
+      height: 1.1em;
+      font-size: var(--org-title, 1.2rem);
+      color: var(--accent);
+      transition: transform 0.15s;
+
+      &.open {
+        transform: rotate(90deg);
+      }
+    }
+    &:hover,
+    &:focus-visible {
+      background: var(--surface);
+      outline: none;
+    }
+  }
+
+  .row {
+    margin-top: 10px;
+  }
+}
+
 .tap-hint {
   text-align: center;
   margin: 18px 0 0;

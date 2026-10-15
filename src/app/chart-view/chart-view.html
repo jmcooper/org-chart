@@ -50,6 +50,69 @@
       </section>
     }
   </main>
+
+  @if (callingGroups().length > 0) {
+    <section class="callings">
+      <button
+        type="button"
+        class="callings-toggle"
+        (click)="toggleCallings()"
+        [attr.aria-expanded]="callingsOpen()"
+        aria-controls="other-callings"
+      >
+        <svg
+          class="disclosure"
+          [class.open]="callingsOpen()"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M9 6l6 6-6 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <h2>Other callings</h2>
+        <span class="hint">{{ callingsOpen() ? 'Tap to collapse' : 'Tap to expand' }}</span>
+      </button>
+      @if (callingsOpen()) {
+        <div id="other-callings" class="row row-orgs">
+          @for (group of callingGroups(); track group.id) {
+            <article class="org">
+              <a
+                class="focus"
+                [routerLink]="['/o', orgId(), 'edit', group.id]"
+                [title]="'Open ' + group.name"
+              >
+                <h2>{{ group.name }}</h2>
+                <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="11" fill="currentColor" opacity="0.18" />
+                  <path
+                    d="M10 7.5l4.5 4.5-4.5 4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+              <ul class="positions">
+                @for (pos of group.positions; track pos.key) {
+                  <li>
+                    <app-position-editor [orgId]="orgId()" [presidency]="group" [pos]="pos" />
+                  </li>
+                }
+              </ul>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
   <p class="hint tap-hint">
     Tap a name to edit it. Tap a presidency's title to open it.
     @if (service.chart()?.updatedAt; as updatedAt) {

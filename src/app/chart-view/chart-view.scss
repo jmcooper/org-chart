@@ -215,6 +215,10 @@
   .row-orgs {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
+  /* Other callings: at most five sections per row, then wrap. */
+  .callings .row-orgs {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
   .row-top {
     grid-template-columns: minmax(0, 1100px);
   }

@@ -35,15 +35,22 @@
 }
 
 @if (presidency(); as presidency) {
-  <main class="positions">
+  <main
+    class="positions"
+    cdkDropList
+    cdkDropListOrientation="mixed"
+    [cdkDropListDisabled]="!isGroup()"
+    (cdkDropListDropped)="reorder($event)"
+  >
     @for (pos of presidency.positions; track pos.key) {
-      <section class="position">
+      <section class="position" cdkDrag [cdkDragDisabled]="!isGroup()">
         <app-position-editor
           [orgId]="orgId()"
           [presidency]="presidency"
           [pos]="pos"
           [maxVisible]="null"
           [titleEditable]="isGroup()"
+          [draggable]="isGroup()"
         />
       </section>
     }

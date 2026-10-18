@@ -1,3 +1,4 @@
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -5,7 +6,7 @@ import { ChartService } from '../chart.service';
 import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
 import { PositionEditor } from '../position-editor/position-editor';
-import { addPosition } from '../position-ops';
+import { addPosition, movePosition } from '../position-ops';
 import { Presidency } from '../models';
 import { OrgsService } from '../orgs.service';
 
@@ -15,7 +16,7 @@ const CALLINGS_OPEN_KEY = 'orgchart.callingsOpen';
 
 @Component({
   selector: 'app-chart-view',
-  imports: [RouterLink, DatePipe, DeleteOrg, PositionEditor, EditableText],
+  imports: [RouterLink, DatePipe, DeleteOrg, PositionEditor, EditableText, CdkDropList, CdkDrag],
   templateUrl: './chart-view.html',
   styleUrl: './chart-view.scss',
 })
@@ -77,6 +78,12 @@ export class ChartView {
   protected addCalling(group: Presidency, title: string): void {
     if (title)
       this.service.updatePresidency(this.orgId(), group.id, (pres) => addPosition(pres, title));
+  }
+
+  protected reorder(group: Presidency, event: CdkDragDrop<unknown>): void {
+    this.service.updatePresidency(this.orgId(), group.id, (pres) =>
+      movePosition(pres, event.previousIndex, event.currentIndex),
+    );
   }
 
   protected addSection(name: string): void {

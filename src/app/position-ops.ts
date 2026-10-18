@@ -105,3 +105,13 @@ export function removePosition(pres: Presidency, key: string): Presidency {
   const removedKeys = [...new Set([...(pres.removedKeys ?? []), key])];
   return { ...pres, positions: pres.positions.filter((p) => p.key !== key), removedKeys };
 }
+
+/** Moves a calling to a new index within its group. */
+export function movePosition(pres: Presidency, from: number, to: number): Presidency {
+  const n = pres.positions.length;
+  if (from === to || from < 0 || to < 0 || from >= n || to >= n) return pres;
+  const positions = [...pres.positions];
+  const [moved] = positions.splice(from, 1);
+  positions.splice(to, 0, moved);
+  return { ...pres, positions };
+}

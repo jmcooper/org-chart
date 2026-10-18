@@ -100,14 +100,15 @@
                   />
                 </svg>
               </a>
-              <ul class="positions">
+              <ul class="positions" cdkDropList (cdkDropListDropped)="reorder(group, $event)">
                 @for (pos of group.positions; track pos.key) {
-                  <li>
+                  <li cdkDrag>
                     <app-position-editor
                       [orgId]="orgId()"
                       [presidency]="group"
                       [pos]="pos"
                       [titleEditable]="true"
+                      [draggable]="true"
                     />
                   </li>
                 }

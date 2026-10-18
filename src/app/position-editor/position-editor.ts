@@ -1,3 +1,4 @@
+import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { ChartService } from '../chart.service';
 import { EditableText } from '../editable-text/editable-text';
@@ -21,7 +22,7 @@ import { StatusPill } from '../status-pill/status-pill';
  */
 @Component({
   selector: 'app-position-editor',
-  imports: [EditableText, StatusPill],
+  imports: [EditableText, StatusPill, CdkDragHandle],
   templateUrl: './position-editor.html',
   styleUrl: './position-editor.scss',
 })
@@ -33,6 +34,8 @@ export class PositionEditor {
   readonly maxVisible = input<number | null>(2);
   /** Callings in the "Other callings" section can be retitled and removed. */
   readonly titleEditable = input(false);
+  /** Shows a grip that starts a drag when the host list is a CDK drop list. */
+  readonly draggable = input(false);
 
   private readonly service = inject(ChartService);
   protected readonly statusLabel = statusLabel;

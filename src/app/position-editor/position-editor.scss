@@ -22,6 +22,32 @@
     }
   }
 
+  .grip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 28px;
+    margin-left: -2px;
+    cursor: grab;
+    color: var(--muted);
+    opacity: 0.5;
+    touch-action: none;
+
+    svg {
+      width: 1.1em;
+      height: 1.1em;
+      fill: currentColor;
+    }
+    &:hover {
+      opacity: 1;
+    }
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
   .remove {
     all: unset;
     cursor: pointer;

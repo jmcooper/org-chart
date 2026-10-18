@@ -36,7 +36,8 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   of the grid creates a group, "+ Add calling" at the bottom of a group adds a position, and a
   calling's title can be edited in place. The small × beside a title removes the calling, including
   the original ones; it asks for confirmation only when someone is listed for it. Removed seed
-  callings are remembered per group so the seed sync does not add them back.
+  callings are remembered per group so the seed sync does not add them back. Drag a calling by the
+  grip at the left of its title to reorder it within its group, on the chart or in the focused view.
 - **Focused presidency** (`/o/:orgId/edit/:id`): the same editing as the chart, but one presidency at
   a time in large type for the office screen, with every additional name shown.
 - Data is stored as JSON on the server under `data/` and survives restarts.

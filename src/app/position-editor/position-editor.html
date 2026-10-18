@@ -1,5 +1,22 @@
 @if (titleEditable()) {
   <div class="title editable-title">
+    @if (draggable()) {
+      <span
+        class="grip"
+        cdkDragHandle
+        [title]="'Drag to reorder ' + pos().title"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 24 24">
+          <circle cx="9" cy="6" r="1.8" />
+          <circle cx="15" cy="6" r="1.8" />
+          <circle cx="9" cy="12" r="1.8" />
+          <circle cx="15" cy="12" r="1.8" />
+          <circle cx="9" cy="18" r="1.8" />
+          <circle cx="15" cy="18" r="1.8" />
+        </svg>
+      </span>
+    }
     <app-editable-text
       [value]="pos().title"
       [label]="'Calling title: ' + pos().title"

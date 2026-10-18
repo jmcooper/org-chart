@@ -199,3 +199,22 @@ input[type='text'] {
   padding: 10px 14px;
   margin: 8px 0;
 }
+
+/* Drag-and-drop (Angular CDK): the preview is rendered at the body level. */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  color: var(--text);
+  font-family: inherit;
+}
+.cdk-drag-placeholder {
+  opacity: 0.25;
+}
+.cdk-drag-animating,
+.cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
+  transition: transform 180ms cubic-bezier(0, 0, 0.2, 1);
+}

@@ -23,7 +23,16 @@ const DIST_DIR = path.join(__dirname, '..', 'dist', 'org-chart', 'browser');
 const TOKEN_TTL_DAYS = Number(process.env.TOKEN_TTL_DAYS) || 30;
 const DEFAULT_ORG_NAME = process.env.DEFAULT_ORG_NAME || 'Summerfield Ward';
 
-const STATUSES = new Set(['considered', 'agreed', 'called', 'sustained', 'setApart']);
+const STATUSES = new Set([
+  'considered',
+  'agreed', // older data; the app no longer offers it
+  'agreedBishop',
+  'agreedHogge',
+  'agreedZaldivar',
+  'called',
+  'sustained',
+  'setApart',
+]);
 const POSITION_KEY = /^[a-z][a-z0-9-]{0,40}$/;
 const MAX_POSITIONS = 20;
 const MAX_PRESIDENCIES = 40;

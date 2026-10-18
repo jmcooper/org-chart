@@ -27,8 +27,9 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   - The up-arrow beside an additional name moves it into the primary spot as *Consider*; the person
     who was there drops to the top of the list. Removing the primary moves the next name up.
   - A small pill in the corner of every filled name box shows its status and drops down the choices:
-    **Consider** (yellow), **Agreed** (blue), **Called** (light green), **Sustained** (dark green),
-    **Set Apart** (dark green with a check mark).
+    **Consider** (yellow), **Agreed (Bishop)**, **Agreed (Hogge)** and **Agreed (Zaldivar)** (all
+    blue), **Called** (light green), **Sustained** (dark green), **Set Apart** (dark green with a
+    check mark).
 - **Other callings**: a collapsible section at the bottom of the chart holds non-presidency callings
   grouped by organization (Relief Society, Primary, Sunday School, Young Men, Young Women). Each
   group works exactly like a presidency card. The section starts collapsed and remembers its state

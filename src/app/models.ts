@@ -1,4 +1,13 @@
-export type Status = 'considered' | 'agreed' | 'called' | 'sustained' | 'setApart';
+export type Status =
+  | 'considered'
+  | 'agreedBishop'
+  | 'agreedHogge'
+  | 'agreedZaldivar'
+  | 'called'
+  | 'sustained'
+  | 'setApart'
+  /** Older data; shown as plain "Agreed" but no longer offered. */
+  | 'agreed';
 
 /** Stable identifier of a position within a presidency, e.g. "president" or "ward-clerk". */
 export type PositionKey = string;
@@ -59,13 +68,16 @@ export interface StatusInfo {
 /** Ordered list of statuses as a calling progresses. */
 export const STATUSES: readonly StatusInfo[] = [
   { value: 'considered', label: 'Consider' },
-  { value: 'agreed', label: 'Agreed' },
+  { value: 'agreedBishop', label: 'Agreed (Bishop)' },
+  { value: 'agreedHogge', label: 'Agreed (Hogge)' },
+  { value: 'agreedZaldivar', label: 'Agreed (Zaldivar)' },
   { value: 'called', label: 'Called' },
   { value: 'sustained', label: 'Sustained' },
   { value: 'setApart', label: 'Set Apart' },
 ];
 
 export function statusLabel(status: Status): string {
+  if (status === 'agreed') return 'Agreed';
   return STATUSES.find((s) => s.value === status)?.label ?? status;
 }
 

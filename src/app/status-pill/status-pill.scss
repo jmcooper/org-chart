@@ -85,7 +85,10 @@
     &.status-considered {
       background: var(--status-considered-bg);
     }
-    &.status-agreed {
+    &.status-agreed,
+    &.status-agreedBishop,
+    &.status-agreedHogge,
+    &.status-agreedZaldivar {
       background: var(--status-agreed-bg);
     }
     &.status-called {

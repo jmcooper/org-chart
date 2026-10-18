@@ -154,7 +154,10 @@ input[type='text'] {
     background: var(--block-bg);
     color: var(--status-considered-fg);
   }
-  &.status-agreed {
+  &.status-agreed,
+  &.status-agreedBishop,
+  &.status-agreedHogge,
+  &.status-agreedZaldivar {
     --block-bg: var(--status-agreed-bg);
     background: var(--block-bg);
     color: var(--status-agreed-fg);

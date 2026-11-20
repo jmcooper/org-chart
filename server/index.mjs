@@ -67,6 +67,8 @@ function validatePosition(p) {
     if (!validateCandidate(p.primary)) return 'invalid primary candidate';
     if (!STATUSES.has(p.primary.status)) return `invalid status "${p.primary.status}"`;
   }
+  if (p.releaseOnly !== undefined && typeof p.releaseOnly !== 'boolean')
+    return 'releaseOnly must be a boolean';
   if (p.release !== undefined && p.release !== null) {
     if (!validateCandidate(p.release)) return 'invalid release';
     if (!RELEASE_STATUSES.has(p.release.status))

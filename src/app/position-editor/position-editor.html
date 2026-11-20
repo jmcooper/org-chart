@@ -45,36 +45,39 @@
   }
 </div>
 
-@if (pos().primary; as p) {
-  <div
-    class="name-block editable"
-    [class]="'editable status-' + p.status"
-    [class.joined-top]="!!pos().release"
-    [title]="statusLabel(p.status)"
-  >
-    <app-editable-text
-      [value]="p.name"
-      [label]="pos().title + ': ' + p.name"
-      (commit)="rename(p, $event)"
-    />
-    <app-status-pill [status]="p.status" (change)="setStatus($event)" />
-  </div>
-} @else {
-  <div class="name-block empty editable" [class.joined-top]="!!pos().release">
-    <app-editable-text
-      value=""
-      placeholder="Add a name"
-      [quiet]="true"
-      [label]="'Add a name for ' + pos().title"
-      (commit)="setPrimary($event)"
-    />
-  </div>
+@if (!pos().releaseOnly) {
+  @if (pos().primary; as p) {
+    <div
+      class="name-block editable"
+      [class]="'editable status-' + p.status"
+      [class.joined-top]="!!pos().release"
+      [title]="statusLabel(p.status)"
+    >
+      <app-editable-text
+        [value]="p.name"
+        [label]="pos().title + ': ' + p.name"
+        (commit)="rename(p, $event)"
+      />
+      <app-status-pill [status]="p.status" (change)="setStatus($event)" />
+    </div>
+  } @else {
+    <div class="name-block empty editable" [class.joined-top]="!!pos().release">
+      <app-editable-text
+        value=""
+        placeholder="Add a name"
+        [quiet]="true"
+        [label]="'Add a name for ' + pos().title"
+        (commit)="setPrimary($event)"
+      />
+    </div>
+  }
 }
 
 @if (pos().release; as r) {
   <div
-    class="name-block editable release joined-bottom"
-    [class]="'editable release joined-bottom status-' + r.status"
+    class="name-block editable release"
+    [class]="'editable release status-' + r.status"
+    [class.joined-bottom]="!pos().releaseOnly"
   >
     <app-editable-text
       [value]="r.name"
@@ -132,12 +135,12 @@
       />
     </li>
   }
-  @if (!pos().release) {
+  @if (!pos().release && !pos().releaseOnly) {
     <li class="add">
       <app-editable-text
         value=""
-        placeholder="+ Add release"
-        [label]="'Add a release for ' + pos().title"
+        placeholder="+ Add from this calling"
+        [label]="'Add a release from ' + pos().title"
         (commit)="addRelease($event)"
       />
     </li>

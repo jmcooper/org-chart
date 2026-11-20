@@ -102,6 +102,8 @@ export class PositionEditor {
   }
 
   protected renameRelease(name: string): void {
+    // A standalone release is nothing but its name, so clearing it removes the entry.
+    if (!name && this.pos().releaseOnly) return this.remove();
     this.update((pos) => renameRelease(pos, name));
   }
 

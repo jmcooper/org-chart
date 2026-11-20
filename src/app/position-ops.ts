@@ -135,3 +135,24 @@ export function renameRelease(pos: Position, name: string): Position {
 export function setReleaseStatus(pos: Position, status: ReleaseStatus): Position {
   return pos.release ? { ...pos, release: { ...pos.release, status } } : pos;
 }
+
+/** Adds a release that is not attached to any calling, as its own entry in the group. */
+export function addStandaloneRelease(pres: Presidency, name: string): Presidency {
+  const trimmed = name.trim();
+  if (!trimmed) return pres;
+  const key = slugKey('release', new Set(pres.positions.map((p) => p.key)));
+  return {
+    ...pres,
+    positions: [
+      ...pres.positions,
+      {
+        key,
+        title: 'Release',
+        primary: null,
+        proposed: [],
+        release: { id: newId(), name: trimmed, status: 'releaseNeeded' },
+        releaseOnly: true,
+      },
+    ],
+  };
+}

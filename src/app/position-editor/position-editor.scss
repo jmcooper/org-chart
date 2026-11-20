@@ -82,7 +82,7 @@
 
   /* The release reads as a secondary line under the incoming name. */
   &.release {
-    font-size: calc(var(--pos-name, 1.15rem) * 0.8);
+    font-size: calc(var(--pos-name, 1.15rem) * 0.64);
     font-weight: 600;
   }
 

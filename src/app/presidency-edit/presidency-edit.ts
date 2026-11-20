@@ -5,7 +5,7 @@ import { ChartService } from '../chart.service';
 import { Presidency } from '../models';
 import { EditableText } from '../editable-text/editable-text';
 import { PositionEditor } from '../position-editor/position-editor';
-import { addPosition, movePosition } from '../position-ops';
+import { addPosition, addStandaloneRelease, movePosition } from '../position-ops';
 
 /** One presidency at a time, in large type for the office screen. */
 @Component({
@@ -47,6 +47,13 @@ export class PresidencyEdit {
     if (!confirm(`Remove ${pres.name} with its ${what}${extra}?`)) return;
     await this.service.removePresidency(this.orgId(), pres.id);
     await this.router.navigate(['/o', this.orgId()]);
+  }
+
+  protected addStandaloneRelease(name: string): void {
+    if (name)
+      this.service.updatePresidency(this.orgId(), this.id(), (pres) =>
+        addStandaloneRelease(pres, name),
+      );
   }
 
   protected addCalling(title: string): void {

@@ -129,6 +129,14 @@
                     (commit)="addCalling(group, $event)"
                   />
                 </li>
+                <li class="add-calling">
+                  <app-editable-text
+                    value=""
+                    placeholder="+ Add release"
+                    [label]="'Add a release to ' + group.name"
+                    (commit)="addStandaloneRelease(group, $event)"
+                  />
+                </li>
               </ul>
               <button type="button" class="remove-section" (click)="removeSection(group)">
                 Remove section

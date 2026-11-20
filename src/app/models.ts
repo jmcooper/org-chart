@@ -37,6 +37,8 @@ export interface Position {
   proposed: Candidate[];
   /** Who is being released from this calling, if a release is in progress. */
   release?: Release | null;
+  /** A release recorded on its own, not attached to a calling: only the release block is shown. */
+  releaseOnly?: boolean;
 }
 
 /** A presidency or bishopric within an organization. */

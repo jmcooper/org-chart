@@ -6,7 +6,7 @@ import { ChartService } from '../chart.service';
 import { DeleteOrg } from '../delete-org/delete-org';
 import { EditableText } from '../editable-text/editable-text';
 import { PositionEditor } from '../position-editor/position-editor';
-import { addPosition, movePosition } from '../position-ops';
+import { addPosition, addStandaloneRelease, movePosition } from '../position-ops';
 import { Presidency } from '../models';
 import { OrgsService } from '../orgs.service';
 
@@ -97,6 +97,13 @@ export class ChartView {
     this.service.updatePresidency(this.orgId(), group.id, (pres) =>
       movePosition(pres, event.previousIndex, event.currentIndex),
     );
+  }
+
+  protected addStandaloneRelease(group: Presidency, name: string): void {
+    if (name)
+      this.service.updatePresidency(this.orgId(), group.id, (pres) =>
+        addStandaloneRelease(pres, name),
+      );
   }
 
   protected addSection(name: string): void {

@@ -64,6 +64,14 @@
           (commit)="addCalling($event)"
         />
       </section>
+      <section class="position add-calling">
+        <app-editable-text
+          value=""
+          placeholder="+ Add release"
+          [label]="'Add a release to ' + presidency.name"
+          (commit)="addStandaloneRelease($event)"
+        />
+      </section>
     }
   </main>
   <footer class="page-end">

@@ -14,133 +14,133 @@
   grid-template-columns: 1fr;
 }
 
-.remove-section {
-  all: unset;
-  cursor: pointer;
-  display: block;
-  margin: 10px auto 0;
-  padding: 6px 10px;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  opacity: 0.45;
+.add-calling {
+  color: var(--accent);
+  opacity: 0.75;
+  font-size: var(--pos-add, 0.8rem);
+  --editable-padding: 0.3em 0.4em;
+  --editable-min-height: 36px;
 
   &:hover,
-  &:focus-visible {
+  &:focus-within {
     opacity: 1;
-    color: var(--danger);
-    text-decoration: underline;
   }
-}
 
-.org {
-  display: block;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 14px 14px;
-}
-
-/* The title is the way into the focused view, so it looks like a link row. */
-.focus {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4em;
-  min-height: 44px;
-  margin: 0 -6px 8px;
-  padding: 4px 10px;
-  border-radius: 10px;
-  color: var(--text);
-  transition: background 0.12s;
-
-  h2 {
-    font-size: var(--org-title, 1.2rem);
-  }
-  .chevron {
-    flex: 0 0 auto;
-    width: 1.1em;
-    height: 1.1em;
-    font-size: var(--org-title, 1.2rem);
-    color: var(--accent);
-  }
-  &:hover,
-  &:focus-visible {
-    background: var(--surface-2);
-    outline: none;
-
-    h2 {
-      text-decoration: underline;
-      text-underline-offset: 0.15em;
-    }
-  }
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-.positions {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-}
-
-.callings {
-  margin-top: 22px;
-  border-top: 1px solid var(--border);
-  padding-top: 8px;
-
-  .callings-toggle {
+  .remove-section {
     all: unset;
     cursor: pointer;
+    display: block;
+    margin: 10px auto 0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    opacity: 0.45;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--danger);
+      text-decoration: underline;
+    }
+  }
+
+  .org {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px 14px;
+  }
+
+  /* The title is the way into the focused view, so it looks like a link row. */
+  .focus {
     display: flex;
     align-items: center;
-    gap: 10px;
-    width: 100%;
-    min-height: 48px;
-    padding: 6px 4px;
+    justify-content: center;
+    gap: 0.4em;
+    min-height: 44px;
+    margin: 0 -6px 8px;
+    padding: 4px 10px;
     border-radius: 10px;
+    color: var(--text);
+    transition: background 0.12s;
 
     h2 {
       font-size: var(--org-title, 1.2rem);
     }
-    .hint {
-      margin-left: auto;
-    }
-    .disclosure {
+    .chevron {
+      flex: 0 0 auto;
       width: 1.1em;
       height: 1.1em;
       font-size: var(--org-title, 1.2rem);
       color: var(--accent);
-      transition: transform 0.15s;
-
-      &.open {
-        transform: rotate(90deg);
-      }
     }
     &:hover,
     &:focus-visible {
-      background: var(--surface);
+      background: var(--surface-2);
       outline: none;
+
+      h2 {
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+      }
+    }
+    &:active {
+      transform: scale(0.98);
     }
   }
 
-  .row {
-    margin-top: 10px;
+  .positions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
   }
 
-  .add-calling {
-    color: var(--accent);
-    opacity: 0.75;
-    font-size: var(--pos-add, 0.8rem);
-    --editable-padding: 0.3em 0.4em;
-    --editable-min-height: 36px;
+  .callings {
+    margin-top: 22px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
 
-    &:hover,
-    &:focus-within {
-      opacity: 1;
+    .callings-toggle {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 48px;
+      padding: 6px 4px;
+      border-radius: 10px;
+
+      h2 {
+        font-size: var(--org-title, 1.2rem);
+      }
+      .hint {
+        margin-left: auto;
+      }
+      .disclosure {
+        width: 1.1em;
+        height: 1.1em;
+        font-size: var(--org-title, 1.2rem);
+        color: var(--accent);
+        transition: transform 0.15s;
+
+        &.open {
+          transform: rotate(90deg);
+        }
+      }
+      &:hover,
+      &:focus-visible {
+        background: var(--surface);
+        outline: none;
+      }
+    }
+
+    .row {
+      margin-top: 10px;
     }
   }
 

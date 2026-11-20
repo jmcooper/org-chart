@@ -2,22 +2,34 @@ import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { ChartService } from '../chart.service';
 import { EditableText } from '../editable-text/editable-text';
-import { Candidate, Position, Presidency, Status, statusLabel } from '../models';
+import {
+  Candidate,
+  PROPOSED_NAMES_ENABLED,
+  Position,
+  Presidency,
+  RELEASE_STATUSES,
+  ReleaseStatus,
+  Status,
+  statusLabel,
+} from '../models';
 import {
   addProposed,
+  addRelease,
   promote,
   removeCandidate,
-  renameCandidate,
   removePosition,
+  renameCandidate,
   renamePosition,
+  renameRelease,
   setPrimary,
+  setReleaseStatus,
   setStatus,
 } from '../position-ops';
 import { StatusPill } from '../status-pill/status-pill';
 
 /**
- * One position: the primary name box with its status pill, the additional
- * names with promote arrows, and the line for adding another name.
+ * One position: the primary name box with its status pill, an optional release
+ * joined beneath it, the additional names with promote arrows, and the add lines.
  * Used by both the chart and the focused view; the views set the sizes.
  */
 @Component({
@@ -32,13 +44,17 @@ export class PositionEditor {
   readonly pos = input.required<Position>();
   /** How many additional names to show before "+X more…"; null shows all. */
   readonly maxVisible = input<number | null>(2);
-  /** Callings in the "Other callings" section can be retitled and removed. */
+  /** Callings in the "Other callings" section can be retitled. */
   readonly titleEditable = input(false);
+  /** Shows a remove control for the calling. */
+  readonly removable = input(false);
   /** Shows a grip that starts a drag when the host list is a CDK drop list. */
   readonly draggable = input(false);
 
   private readonly service = inject(ChartService);
   protected readonly statusLabel = statusLabel;
+  protected readonly proposedEnabled = PROPOSED_NAMES_ENABLED;
+  protected readonly releaseStatuses = RELEASE_STATUSES;
   private readonly expanded = signal(false);
 
   protected readonly visible = computed<Candidate[]>(() => {
@@ -75,9 +91,25 @@ export class PositionEditor {
     this.update((pos) => promote(pos, candidate));
   }
 
-  protected setStatus(status: Status): void {
-    this.update((pos) => setStatus(pos, status));
+  protected setStatus(status: string): void {
+    this.update((pos) => setStatus(pos, status as Status));
   }
+
+  // ---- release ----
+
+  protected addRelease(name: string): void {
+    if (name) this.update((pos) => addRelease(pos, name));
+  }
+
+  protected renameRelease(name: string): void {
+    this.update((pos) => renameRelease(pos, name));
+  }
+
+  protected setReleaseStatus(status: string): void {
+    this.update((pos) => setReleaseStatus(pos, status as ReleaseStatus));
+  }
+
+  // ---- the calling itself ----
 
   protected retitle(title: string): void {
     const key = this.pos().key;
@@ -90,7 +122,7 @@ export class PositionEditor {
   /** Removes the calling. Asks first only when someone is listed for it. */
   protected remove(): void {
     const pos = this.pos();
-    const listed = (pos.primary ? 1 : 0) + pos.proposed.length;
+    const listed = (pos.primary ? 1 : 0) + pos.proposed.length + (pos.release ? 1 : 0);
     if (
       listed > 0 &&
       !confirm(

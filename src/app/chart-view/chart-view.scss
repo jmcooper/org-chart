@@ -14,6 +14,25 @@
   grid-template-columns: 1fr;
 }
 
+.remove-section {
+  all: unset;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  opacity: 0.45;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    color: var(--danger);
+    text-decoration: underline;
+  }
+}
+
 .org {
   display: block;
   background: var(--surface);

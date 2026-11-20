@@ -41,10 +41,18 @@
             <ul class="positions">
               @for (pos of pres.positions; track pos.key) {
                 <li>
-                  <app-position-editor [orgId]="orgId()" [presidency]="pres" [pos]="pos" />
+                  <app-position-editor
+                    [orgId]="orgId()"
+                    [presidency]="pres"
+                    [pos]="pos"
+                    [removable]="true"
+                  />
                 </li>
               }
             </ul>
+            <button type="button" class="remove-section" (click)="removeSection(pres)">
+              Remove section
+            </button>
           </article>
         }
       </section>
@@ -108,6 +116,7 @@
                       [presidency]="group"
                       [pos]="pos"
                       [titleEditable]="true"
+                      [removable]="true"
                       [draggable]="true"
                     />
                   </li>
@@ -121,6 +130,9 @@
                   />
                 </li>
               </ul>
+              <button type="button" class="remove-section" (click)="removeSection(group)">
+                Remove section
+              </button>
             </article>
           }
           <article class="org add-section">

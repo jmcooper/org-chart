@@ -24,8 +24,14 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   tap a name to change it (clear it to remove it), or tap "+ Add name for consideration" under a position to propose
   someone. Tap a presidency's title (marked with a chevron) to open the focused view. The display
   polls the server every 10 seconds so edits made from a phone show up on the office screen.
-  - The up-arrow beside an additional name moves it into the primary spot as *Consider*; the person
-    who was there drops to the top of the list. Removing the primary moves the next name up.
+  - Adding additional names for consideration is currently switched off (`PROPOSED_NAMES_ENABLED` in
+    `models.ts`); names already listed still show and can be promoted with the up-arrow.
+  - **Releases**: "+ Add release" under a calling records who is being released. The release sits
+    joined beneath the name box and has its own status: **Release Needed** (orange), **Release
+    Extended** (lighter red), **Released** (dark red with a check mark). Clearing the name removes it.
+  - The × beside any calling's title removes that calling; "Remove section" at the bottom of any card
+    removes a presidency or group. Both ask for confirmation when names would be lost. Removed seed
+    items are remembered so the seed sync does not add them back.
   - A small pill in the corner of every filled name box shows its status and drops down the choices:
     **Consider** (yellow), **Agreed (Bishop)**, **Agreed (Hogge)** and **Agreed (Zaldivar)** (all
     blue), **Called** (light green), **Sustained** (dark green), **Set Apart** (dark green with a
@@ -94,6 +100,7 @@ organization.
 | GET    | `/api/orgs/:orgId/chart`              | that org    | Whole chart                                   |
 | PUT    | `/api/orgs/:orgId/presidencies/:id`   | that org    | Replace one presidency; returns whole chart   |
 | POST   | `/api/orgs/:orgId/presidencies`       | that org    | Add an "Other callings" group `{ name }`       |
+| DELETE | `/api/orgs/:orgId/presidencies/:id`   | that org    | Remove a presidency or group                  |
 
 ## Customizing the presidencies
 

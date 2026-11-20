@@ -21,6 +21,12 @@
   --status-sustained-fg: #ffffff;
   --status-setApart-bg: #2e7d32;
   --status-setApart-fg: #ffffff;
+  --status-releaseNeeded-bg: #d9742b;
+  --status-releaseNeeded-fg: #ffffff;
+  --status-releaseExtended-bg: #e05a5a;
+  --status-releaseExtended-fg: #ffffff;
+  --status-released-bg: #8e1b1b;
+  --status-released-fg: #ffffff;
 
   --radius: 12px;
   --gutter: 16px;
@@ -172,6 +178,32 @@ input[type='text'] {
     --block-bg: var(--status-sustained-bg);
     background: var(--block-bg);
     color: var(--status-sustained-fg);
+  }
+  &.status-releaseNeeded {
+    --block-bg: var(--status-releaseNeeded-bg);
+    background: var(--block-bg);
+    color: var(--status-releaseNeeded-fg);
+  }
+  &.status-releaseExtended {
+    --block-bg: var(--status-releaseExtended-bg);
+    background: var(--block-bg);
+    color: var(--status-releaseExtended-fg);
+  }
+  &.status-released {
+    --block-bg: var(--status-released-bg);
+    background: var(--block-bg);
+    color: var(--status-released-fg);
+  }
+
+  /* A release block sits joined beneath the name box: one rounded shape, one shared edge. */
+  &.joined-top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  &.joined-bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.28);
   }
 }
 

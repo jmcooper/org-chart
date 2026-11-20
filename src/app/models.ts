@@ -21,6 +21,13 @@ export interface PrimaryCandidate extends Candidate {
   status: Status;
 }
 
+export type ReleaseStatus = 'releaseNeeded' | 'releaseExtended' | 'released';
+
+/** The person being released from a calling, tracked alongside the incoming name. */
+export interface Release extends Candidate {
+  status: ReleaseStatus;
+}
+
 export interface Position {
   key: PositionKey;
   title: string;
@@ -28,6 +35,8 @@ export interface Position {
   primary: PrimaryCandidate | null;
   /** Other names under consideration, in display order. */
   proposed: Candidate[];
+  /** Who is being released from this calling, if a release is in progress. */
+  release?: Release | null;
 }
 
 /** A presidency or bishopric within an organization. */
@@ -44,7 +53,12 @@ export interface Presidency {
 export interface OrgChart {
   updatedAt: string | null;
   presidencies: Presidency[];
+  /** Ids of seed presidencies or groups deliberately removed, so the server does not add them back. */
+  removedIds?: string[];
 }
+
+/** Whether additional names for consideration can be added. Kept switchable; currently off. */
+export const PROPOSED_NAMES_ENABLED = false;
 
 /** A ward, branch, or other unit. Its PIN never leaves the server. */
 export interface Org {
@@ -74,6 +88,12 @@ export const STATUSES: readonly StatusInfo[] = [
   { value: 'called', label: 'Called' },
   { value: 'sustained', label: 'Sustained' },
   { value: 'setApart', label: 'Set Apart' },
+];
+
+export const RELEASE_STATUSES: readonly { value: ReleaseStatus; label: string }[] = [
+  { value: 'releaseNeeded', label: 'Release Needed' },
+  { value: 'releaseExtended', label: 'Release Extended' },
+  { value: 'released', label: 'Released' },
 ];
 
 export function statusLabel(status: Status): string {

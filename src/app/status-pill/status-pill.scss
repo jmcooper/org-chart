@@ -98,5 +98,14 @@
     &.status-setApart {
       background: var(--status-sustained-bg);
     }
+    &.status-releaseNeeded {
+      background: var(--status-releaseNeeded-bg);
+    }
+    &.status-releaseExtended {
+      background: var(--status-releaseExtended-bg);
+    }
+    &.status-released {
+      background: var(--status-released-bg);
+    }
   }
 }

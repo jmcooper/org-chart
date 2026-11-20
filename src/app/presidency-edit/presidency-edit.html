@@ -50,6 +50,7 @@
           [pos]="pos"
           [maxVisible]="null"
           [titleEditable]="isGroup()"
+          [removable]="true"
           [draggable]="isGroup()"
         />
       </section>
@@ -65,6 +66,11 @@
       </section>
     }
   </main>
+  <footer class="page-end">
+    <button type="button" class="subtle" (click)="removeSection()">
+      Remove {{ presidency.name }}
+    </button>
+  </footer>
 } @else if (service.chart()) {
   <div class="error">
     No presidency with id "{{ id() }}". <a [routerLink]="['/o', orgId()]">Back to chart</a>

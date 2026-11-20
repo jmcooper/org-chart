@@ -78,3 +78,24 @@
     align-items: start;
   }
 }
+
+.page-end {
+  margin-top: 48px;
+  text-align: center;
+
+  .subtle {
+    all: unset;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.75rem;
+    opacity: 0.6;
+    padding: 12px 8px;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--danger);
+      text-decoration: underline;
+    }
+  }
+}

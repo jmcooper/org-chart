@@ -4,9 +4,9 @@
   (click)="toggle($event)"
   [attr.aria-expanded]="open()"
   aria-haspopup="menu"
-  [attr.aria-label]="'Status: ' + statusLabel(status()) + '. Change status'"
+  [attr.aria-label]="'Status: ' + label() + '. Change status'"
 >
-  @if (status() === 'setApart') {
+  @if (status() === 'setApart' || status() === 'released') {
     <svg class="check" viewBox="0 0 24 24" aria-hidden="true">
       <path
         d="M5 12.5l4.5 4.5 9.5-10"
@@ -18,22 +18,22 @@
       />
     </svg>
   }
-  {{ statusLabel(status()) }}
+  {{ label() }}
   <span class="caret" aria-hidden="true">▾</span>
 </button>
 
 @if (open()) {
   <div class="menu" role="menu">
-    @for (s of statuses; track s.value) {
+    @for (o of options(); track o.value) {
       <button
         type="button"
         role="menuitemradio"
-        [attr.aria-checked]="s.value === status()"
-        [class.active]="s.value === status()"
-        (click)="choose(s.value)"
+        [attr.aria-checked]="o.value === status()"
+        [class.active]="o.value === status()"
+        (click)="choose(o.value)"
       >
-        <span class="swatch" [class]="'swatch status-' + s.value"></span>
-        {{ s.label }}
+        <span class="swatch" [class]="'swatch status-' + o.value"></span>
+        {{ o.label }}
       </button>
     }
   </div>

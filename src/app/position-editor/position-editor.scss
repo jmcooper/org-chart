@@ -9,17 +9,18 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
+  .title-text,
+  app-editable-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
   &.editable-title {
     --editable-padding: 0.15em 0.3em;
     margin-left: -0.3em;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    app-editable-text {
-      flex: 1 1 auto;
-    }
   }
 
   .grip {
@@ -78,6 +79,12 @@
 }
 .name-block {
   font-size: var(--pos-name, 1.15rem);
+
+  /* The release reads as a secondary line under the incoming name. */
+  &.release {
+    font-size: calc(var(--pos-name, 1.15rem) * 0.8);
+    font-weight: 600;
+  }
 
   /* The editable text fills the whole block so any tap on it starts editing. */
   &.editable {

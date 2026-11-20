@@ -73,6 +73,19 @@ export class ChartView {
     }
   }
 
+  // ---- removing a section (presidency or calling group) ----
+
+  protected async removeSection(pres: Presidency): Promise<void> {
+    const names = pres.positions.reduce(
+      (n, p) => n + (p.primary ? 1 : 0) + p.proposed.length + (p.release ? 1 : 0),
+      0,
+    );
+    const what = `${pres.positions.length} calling${pres.positions.length === 1 ? '' : 's'}`;
+    const extra = names > 0 ? ` and the ${names} name${names === 1 ? '' : 's'} listed` : '';
+    if (!confirm(`Remove ${pres.name} with its ${what}${extra}?`)) return;
+    await this.service.removePresidency(this.orgId(), pres.id);
+  }
+
   // ---- other callings: sections and callings can be added here ----
 
   protected addCalling(group: Presidency, title: string): void {

@@ -115,6 +115,27 @@ export class ChartService {
     }
   }
 
+  /** Removes a presidency or calling group from the chart. */
+  async removePresidency(orgId: string, presidencyId: string): Promise<void> {
+    this.saveState.set('saving');
+    try {
+      const chart = await firstValueFrom(
+        this.http.delete<OrgChart>(
+          `/api/orgs/${encodeURIComponent(orgId)}/presidencies/${encodeURIComponent(presidencyId)}`,
+        ),
+      );
+      if (this.orgId() !== orgId) return;
+      this.chart.set(chart);
+      this.saveError.set(null);
+      this.saveState.set('saved');
+      this.saveTimer = setTimeout(() => this.saveState.set('idle'), 1500);
+    } catch (err) {
+      this.handleUnauthorized(orgId, err);
+      this.saveError.set(messageFor(err));
+      this.saveState.set('error');
+    }
+  }
+
   /** Applies a change to one position of one presidency and saves it. */
   updatePosition(
     orgId: string,

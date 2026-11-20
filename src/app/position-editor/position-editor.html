@@ -1,27 +1,30 @@
-@if (titleEditable()) {
-  <div class="title editable-title">
-    @if (draggable()) {
-      <span
-        class="grip"
-        cdkDragHandle
-        [title]="'Drag to reorder ' + pos().title"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 24 24">
-          <circle cx="9" cy="6" r="1.8" />
-          <circle cx="15" cy="6" r="1.8" />
-          <circle cx="9" cy="12" r="1.8" />
-          <circle cx="15" cy="12" r="1.8" />
-          <circle cx="9" cy="18" r="1.8" />
-          <circle cx="15" cy="18" r="1.8" />
-        </svg>
-      </span>
-    }
+<div
+  class="title"
+  [class.editable-title]="titleEditable()"
+  [class.has-controls]="draggable() || removable()"
+>
+  @if (draggable()) {
+    <span class="grip" cdkDragHandle [title]="'Drag to reorder ' + pos().title" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="6" r="1.8" />
+        <circle cx="15" cy="6" r="1.8" />
+        <circle cx="9" cy="12" r="1.8" />
+        <circle cx="15" cy="12" r="1.8" />
+        <circle cx="9" cy="18" r="1.8" />
+        <circle cx="15" cy="18" r="1.8" />
+      </svg>
+    </span>
+  }
+  @if (titleEditable()) {
     <app-editable-text
       [value]="pos().title"
       [label]="'Calling title: ' + pos().title"
       (commit)="retitle($event)"
     />
+  } @else {
+    <span class="title-text">{{ pos().title }}</span>
+  }
+  @if (removable()) {
     <button
       type="button"
       class="remove"
@@ -39,14 +42,14 @@
         />
       </svg>
     </button>
-  </div>
-} @else {
-  <div class="title">{{ pos().title }}</div>
-}
+  }
+</div>
+
 @if (pos().primary; as p) {
   <div
     class="name-block editable"
     [class]="'editable status-' + p.status"
+    [class.joined-top]="!!pos().release"
     [title]="statusLabel(p.status)"
   >
     <app-editable-text
@@ -57,7 +60,7 @@
     <app-status-pill [status]="p.status" (change)="setStatus($event)" />
   </div>
 } @else {
-  <div class="name-block empty editable">
+  <div class="name-block empty editable" [class.joined-top]="!!pos().release">
     <app-editable-text
       value=""
       placeholder="Add a name"
@@ -67,6 +70,25 @@
     />
   </div>
 }
+
+@if (pos().release; as r) {
+  <div
+    class="name-block editable release joined-bottom"
+    [class]="'editable release joined-bottom status-' + r.status"
+  >
+    <app-editable-text
+      [value]="r.name"
+      [label]="'Release: ' + r.name"
+      (commit)="renameRelease($event)"
+    />
+    <app-status-pill
+      [status]="r.status"
+      [options]="releaseStatuses"
+      (change)="setReleaseStatus($event)"
+    />
+  </div>
+}
+
 <ul class="proposed">
   @for (c of visible(); track c.id) {
     <li class="candidate">
@@ -100,13 +122,23 @@
       <button type="button" class="more" (click)="expand()">+{{ more }} more…</button>
     </li>
   }
-  @if (pos().primary) {
+  @if (proposedEnabled && pos().primary) {
     <li class="add">
       <app-editable-text
         value=""
         placeholder="+ Add name for consideration"
         [label]="'Add another name for ' + pos().title"
         (commit)="add($event)"
+      />
+    </li>
+  }
+  @if (!pos().release) {
+    <li class="add">
+      <app-editable-text
+        value=""
+        placeholder="+ Add release"
+        [label]="'Add a release for ' + pos().title"
+        (commit)="addRelease($event)"
       />
     </li>
   }

@@ -33,6 +33,7 @@ const STATUSES = new Set([
   'sustained',
   'setApart',
 ]);
+const RELEASE_STATUSES = new Set(['releaseNeeded', 'releaseExtended', 'released']);
 const POSITION_KEY = /^[a-z][a-z0-9-]{0,40}$/;
 const MAX_POSITIONS = 20;
 const MAX_PRESIDENCIES = 40;
@@ -65,6 +66,11 @@ function validatePosition(p) {
   if (p.primary !== null) {
     if (!validateCandidate(p.primary)) return 'invalid primary candidate';
     if (!STATUSES.has(p.primary.status)) return `invalid status "${p.primary.status}"`;
+  }
+  if (p.release !== undefined && p.release !== null) {
+    if (!validateCandidate(p.release)) return 'invalid release';
+    if (!RELEASE_STATUSES.has(p.release.status))
+      return `invalid release status "${p.release.status}"`;
   }
   if (!Array.isArray(p.proposed) || p.proposed.length > 50) return 'proposed must be an array';
   if (!p.proposed.every(validateCandidate)) return 'invalid proposed candidate';
@@ -125,7 +131,7 @@ function withSeedPositions(chart, seed) {
     };
   });
   // Whole presidencies or calling groups that are new in the seed are added at the end.
-  const have = new Set(presidencies.map((p) => p.id));
+  const have = new Set([...presidencies.map((p) => p.id), ...(chart.removedIds ?? [])]);
   const newOnes = seed.presidencies.filter((p) => !have.has(p.id));
   if (newOnes.length > 0) {
     changed = true;
@@ -376,6 +382,28 @@ app.post('/api/orgs/:orgId/presidencies', requireOrgToken, async (req, res, next
     if (!chart) return res.status(404).json({ error: 'organization not found' });
     if (chart === 'full') return res.status(409).json({ error: 'Too many sections' });
     res.status(201).json(chart);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** Removes a presidency or group. Seed ones are remembered so the seed sync does not restore them. */
+app.delete('/api/orgs/:orgId/presidencies/:id', requireOrgToken, async (req, res, next) => {
+  try {
+    const chart = await store.locked(async () => {
+      const chart = await loadChart(req.params.orgId);
+      if (!chart) return null;
+      const idx = chart.presidencies.findIndex((p) => p.id === req.params.id);
+      if (idx === -1) return 'missing';
+      chart.presidencies.splice(idx, 1);
+      chart.removedIds = [...new Set([...(chart.removedIds ?? []), req.params.id])];
+      chart.updatedAt = new Date().toISOString();
+      await store.writeChart(req.params.orgId, chart);
+      return chart;
+    });
+    if (!chart) return res.status(404).json({ error: 'organization not found' });
+    if (chart === 'missing') return res.status(404).json({ error: 'presidency not found' });
+    res.json(chart);
   } catch (err) {
     next(err);
   }

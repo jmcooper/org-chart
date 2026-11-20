@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, computed, inject, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ChartService } from '../chart.service';
 import { Presidency } from '../models';
 import { EditableText } from '../editable-text/editable-text';
@@ -20,6 +20,7 @@ export class PresidencyEdit {
   readonly id = input.required<string>();
 
   protected readonly service = inject(ChartService);
+  private readonly router = inject(Router);
 
   protected readonly presidency = computed<Presidency | undefined>(() =>
     this.service.presidencies().find((p) => p.id === this.id()),
@@ -32,6 +33,20 @@ export class PresidencyEdit {
     this.service.updatePresidency(this.orgId(), this.id(), (pres) =>
       movePosition(pres, event.previousIndex, event.currentIndex),
     );
+  }
+
+  protected async removeSection(): Promise<void> {
+    const pres = this.presidency();
+    if (!pres) return;
+    const names = pres.positions.reduce(
+      (n, p) => n + (p.primary ? 1 : 0) + p.proposed.length + (p.release ? 1 : 0),
+      0,
+    );
+    const what = `${pres.positions.length} calling${pres.positions.length === 1 ? '' : 's'}`;
+    const extra = names > 0 ? ` and the ${names} name${names === 1 ? '' : 's'} listed` : '';
+    if (!confirm(`Remove ${pres.name} with its ${what}${extra}?`)) return;
+    await this.service.removePresidency(this.orgId(), pres.id);
+    await this.router.navigate(['/o', this.orgId()]);
   }
 
   protected addCalling(title: string): void {

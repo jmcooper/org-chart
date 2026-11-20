@@ -1,4 +1,4 @@
-import { Candidate, Position, Presidency, Status, newId } from './models';
+import { Candidate, Position, Presidency, ReleaseStatus, Status, newId } from './models';
 
 /** Pure transformations of a position. Each returns a new Position; nothing is mutated. */
 
@@ -114,4 +114,24 @@ export function movePosition(pres: Presidency, from: number, to: number): Presid
   const [moved] = positions.splice(from, 1);
   positions.splice(to, 0, moved);
   return { ...pres, positions };
+}
+
+// ---- releases ----
+
+export function addRelease(pos: Position, name: string): Position {
+  const trimmed = name.trim();
+  if (!trimmed || pos.release) return pos;
+  return { ...pos, release: { id: newId(), name: trimmed, status: 'releaseNeeded' } };
+}
+
+/** Renames the person being released; an empty name removes the release. */
+export function renameRelease(pos: Position, name: string): Position {
+  if (!pos.release) return pos;
+  const trimmed = name.trim();
+  if (!trimmed) return { ...pos, release: null };
+  return { ...pos, release: { ...pos.release, name: trimmed } };
+}
+
+export function setReleaseStatus(pos: Position, status: ReleaseStatus): Position {
+  return pos.release ? { ...pos, release: { ...pos.release, status } } : pos;
 }

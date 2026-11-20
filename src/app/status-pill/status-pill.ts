@@ -1,7 +1,12 @@
-import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
-import { STATUSES, Status, statusLabel } from '../models';
+import { Component, ElementRef, computed, inject, input, output, signal } from '@angular/core';
+import { STATUSES, statusLabel } from '../models';
 
-/** Small pill in the corner of a name box; tapping it drops down the status choices. */
+export interface PillOption {
+  value: string;
+  label: string;
+}
+
+/** Small pill in the corner of a name box; tapping it drops down the choices. */
 @Component({
   selector: 'app-status-pill',
   templateUrl: './status-pill.html',
@@ -12,22 +17,28 @@ import { STATUSES, Status, statusLabel } from '../models';
   },
 })
 export class StatusPill {
-  readonly status = input.required<Status>();
-  readonly change = output<Status>();
+  readonly status = input.required<string>();
+  /** The choices offered; defaults to the calling statuses. */
+  readonly options = input<readonly PillOption[]>(STATUSES);
+  readonly change = output<string>();
 
-  protected readonly statuses = STATUSES;
-  protected readonly statusLabel = statusLabel;
   protected readonly open = signal(false);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  protected readonly label = computed(
+    () =>
+      this.options().find((o) => o.value === this.status())?.label ??
+      statusLabel(this.status() as never),
+  );
 
   protected toggle(event: Event): void {
     event.stopPropagation();
     this.open.update((v) => !v);
   }
 
-  protected choose(status: Status): void {
+  protected choose(value: string): void {
     this.open.set(false);
-    if (status !== this.status()) this.change.emit(status);
+    if (value !== this.status()) this.change.emit(value);
   }
 
   protected onDocumentClick(event: Event): void {

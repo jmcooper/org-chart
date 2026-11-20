@@ -85,6 +85,11 @@
     font-size: calc(var(--pos-name, 1.15rem) * 0.64);
     font-weight: 600;
   }
+  /* A release on its own is an entry in its own right, so it is sized like a calling. */
+  &.release.standalone {
+    font-size: var(--pos-name, 1.15rem);
+    font-weight: 650;
+  }
 
   /* The editable text fills the whole block so any tap on it starts editing. */
   &.editable {

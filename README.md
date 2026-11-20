@@ -26,7 +26,7 @@ It is meant to run on a screen in the bishop's office (desktop layout) and on ph
   polls the server every 10 seconds so edits made from a phone show up on the office screen.
   - Adding additional names for consideration is currently switched off (`PROPOSED_NAMES_ENABLED` in
     `models.ts`); names already listed still show and can be promoted with the up-arrow.
-  - **Releases**: "+ Add from this calling" under a calling records who is being released from it.
+  - **Releases**: "+ Add release from this calling" under a calling records who is being released from it.
     The release sits joined beneath the name box and has its own status: **Release Needed** (orange),
     **Release Extended** (lighter red), **Released** (dark red with a check mark). Clearing the name
     removes it. In an Other callings group, "+ Add release" under "+ Add calling" records a release

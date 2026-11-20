@@ -78,6 +78,7 @@
     class="name-block editable release"
     [class]="'editable release status-' + r.status"
     [class.joined-bottom]="!pos().releaseOnly"
+    [class.standalone]="pos().releaseOnly"
   >
     <app-editable-text
       [value]="r.name"
@@ -139,7 +140,7 @@
     <li class="add">
       <app-editable-text
         value=""
-        placeholder="+ Add from this calling"
+        placeholder="+ Add release from this calling"
         [label]="'Add a release from ' + pos().title"
         (commit)="addRelease($event)"
       />
